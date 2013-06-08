@@ -21,6 +21,9 @@
 
 
 void yyerror(const char* s);
+void atributovalido(char* atr);
+char* elem;
+char* atrib;
 %} 
 
 %union {
@@ -61,6 +64,7 @@ html_h : '<'html atributos '>' {
 	ListaAtributos_t* listaTmp =listaAtributosActual;
 	agregarListaAtributos(nodoActual,listaTmp);
 	listaAtributosActual=crearListaAtributos();
+	elem="html";
 }//Agregado a la gramatica
 ;
 html_t : '<' '/' html '>' //Agregado a la gramtica 
@@ -73,6 +77,7 @@ head_h2 : '<' head atributos '>' //Agregado a la gramatica
 	ListaAtributos_t* listaTmp =listaAtributosActual;
 	agregarListaAtributos(nodoActual,listaTmp);
 	listaAtributosActual=crearListaAtributos();
+	elem="head";
 }//Agregado a la gramatica
 ;
 head_tag :  infoh head_t 
@@ -91,6 +96,7 @@ meta : '<' T_meta atributos '/' '>'
 	agregarListaAtributos(nodoActual,listaTmp);
 	listaAtributosActual=crearListaAtributos();
 	nodoActual= nodoActual->padre;
+	elem="meta";
 }//Agregado a la gramatica
 ;
 body : body_h body_tag
@@ -100,6 +106,7 @@ body_h: '<' T_body atributos '>' {
 	ListaAtributos_t* listaTmp =listaAtributosActual;
 	agregarListaAtributos(nodoActual,listaTmp);
 	listaAtributosActual=crearListaAtributos();
+	elem="body";
 }//Agregado a la gramatica
 ;
 body_tag :  tags body_tag
@@ -158,6 +165,8 @@ a_h : a_h2 a_tag //Modificacion gramtica
 a_h2 : '<' T_a atributos '>'//Agregado a la gramtica
 {
 	accionCabezaLeida_Arbl("a");
+	elem="a";
+	atributovalido(nombreAtributoLeido);
 }
 ;
 em_h : em_h2 em_tag
@@ -180,6 +189,7 @@ img_h : '<' T_img atributos '/''>'{
 	agregarListaAtributos(nodoActual,listaTmp);
 	listaAtributosActual=crearListaAtributos();
 	nodoActual= nodoActual->padre;
+	elem="img";
 }//Modificado borre img_tag !!!!!!!!!!!!!!!!!!!!!!!!!PREGUNTAR SI ES IMPORTANTE!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 ;
 span_h : span_h2 span_tag
@@ -215,6 +225,7 @@ li_h : li_h2 li_tag
 li_h2 : '<' T_li atributos '>'//Agregado a la gramtica
 {
 	accionCabezaLeida_Arbl("li");
+	elem="li";
 }
 ;
 strong_h: strong_h2 strong_tag
@@ -257,6 +268,7 @@ table_h : table_h2 table_tag
 table_h2 : '<' T_table atributos '>'
 {
 	accionCabezaLeida_Arbl("table");
+	elem="table";
 }
 ;
 footer_h : footer_h2 footer_tag
@@ -271,6 +283,7 @@ td_h : td_h2 td_tag
 td_h2 : '<' T_td atributos '>'
 {
 	accionCabezaLeida_Arbl("td");
+	elem="td";
 }
 ;
 br_h : br_h2 br_tag
@@ -292,6 +305,7 @@ object_h : object_h2 object_tag//Modificacion gramtica
 object_h2: '<' T_object atributos '>'
 {
 	accionCabezaLeida_Arbl("object");
+ 	elem="object";
 }
 ;
 th_h : th_h2 th_tag
@@ -313,6 +327,7 @@ h1_h : h1_h2 h1_tag
 h1_h2 : '<' T_h1 atributos '>'
 {
 	accionCabezaLeida_Arbl("h1");
+ 	elem="h1";
 }
 ;
 h2_h : h2_h2 h2_tag
@@ -362,6 +377,7 @@ tr_h : tr_h2 tr_tag
 tr_h2 : '<' T_tr atributos '>'
 {
 	accionCabezaLeida_Arbl("tr");
+	elem="tr";
 }
 ;
 caption_h : caption_h2 caption_tag
@@ -404,6 +420,7 @@ p_h : p_h2 p_tag//Modificacion gramtica
 p_h2: '<' T_p atributos '>' 
 {
 	accionCabezaLeida_Arbl("p");
+	elem="p";
 }
 //Agregado a la gramatica
 ;
@@ -413,12 +430,15 @@ title_h2: '<' T_title atributos '>'
 {
 	//Si hay algun texto en la lista pertenecen al padre de title
 	accionCabezaLeida_Arbl("title");
+	elem="title";
 }
+;
 div_h : div_h2 div_tag
 ;
 div_h2: '<' T_div atributos '>'
 {
 	accionCabezaLeida_Arbl("div");
+	elem="div";
 }
 ;
 hr_h : hr_h2 hr_tag
@@ -440,6 +460,7 @@ ul_h : ul_h2 ul_tag
 ul_h2: '<' T_ul atributos '>'
 {
 	accionCabezaLeida_Arbl("ul");
+	elem="ul";
 }
 ;
 input_h : input_h2 input_tag 
@@ -1001,6 +1022,16 @@ void yyerror(const char* s)
 {
  fprintf(stderr,"Error en linea %d, columna %d : %s\n", yylloc.first_line, yylloc.first_column, s);
 }
+
+void atributovalido(char* atr){
+	if(elem=="a"){
+	if(strcmp(atr,"href")==0 || strcmp(atr,"hreflang")==0 || strcmp(atr,"media")==0 || strcmp(atr,"rel")==0 || strcmp(atr,"target")==0 || strcmp(atr,"type")==0)
+	printf("bien");
+	else
+	printf("%s",atr);
+	}
+}
+
 
 void agregarHijo(Nodo_t* padre, Nodo_t* hijo){
 	if(padre->listaHijos->primerHijo==NULL)
