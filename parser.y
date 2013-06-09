@@ -65,6 +65,7 @@ html_h : '<'html atributos '>' {
 	agregarListaAtributos(nodoActual,listaTmp);
 	listaAtributosActual=crearListaAtributos();
 	elem="html";
+	atributovalido(nombreAtributoLeido);
 }//Agregado a la gramatica
 ;
 html_t : '<' '/' html '>' //Agregado a la gramtica 
@@ -78,6 +79,7 @@ head_h2 : '<' head atributos '>' //Agregado a la gramatica
 	agregarListaAtributos(nodoActual,listaTmp);
 	listaAtributosActual=crearListaAtributos();
 	elem="head";
+	atributovalido(nombreAtributoLeido);
 }//Agregado a la gramatica
 ;
 head_tag :  infoh head_t 
@@ -97,6 +99,7 @@ meta : '<' T_meta atributos '/' '>'
 	listaAtributosActual=crearListaAtributos();
 	nodoActual= nodoActual->padre;
 	elem="meta";
+	atributovalido(nombreAtributoLeido);
 }//Agregado a la gramatica
 ;
 body : body_h body_tag
@@ -107,6 +110,7 @@ body_h: '<' T_body atributos '>' {
 	agregarListaAtributos(nodoActual,listaTmp);
 	listaAtributosActual=crearListaAtributos();
 	elem="body";
+	atributovalido(nombreAtributoLeido);
 }//Agregado a la gramatica
 ;
 body_tag :  tags body_tag
@@ -174,6 +178,8 @@ em_h : em_h2 em_tag
 em_h2 : '<' T_em atributos '>'//Agregado a la gramtica
 {
 	accionCabezaLeida_Arbl("em");
+	elem="em";
+	atributovalido(nombreAtributoLeido);
 }
 ;
 dt_h : dt_h2 dt_tag
@@ -181,6 +187,8 @@ dt_h : dt_h2 dt_tag
 dt_h2 : '<' T_dt atributos '>'//Agregado a la gramtica
 {
 	accionCabezaLeida_Arbl("dt");
+	elem="dt";
+	atributovalido(nombreAtributoLeido);
 }
 ;
 img_h : '<' T_img atributos '/''>'{
@@ -190,6 +198,7 @@ img_h : '<' T_img atributos '/''>'{
 	listaAtributosActual=crearListaAtributos();
 	nodoActual= nodoActual->padre;
 	elem="img";
+	atributovalido(nombreAtributoLeido);
 }//Modificado borre img_tag !!!!!!!!!!!!!!!!!!!!!!!!!PREGUNTAR SI ES IMPORTANTE!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 ;
 span_h : span_h2 span_tag
@@ -197,6 +206,8 @@ span_h : span_h2 span_tag
 span_h2 : '<' T_span atributos '>'//Agregado a la gramtica
 {
 	accionCabezaLeida_Arbl("span");
+	elem="span";
+	atributovalido(nombreAtributoLeido);
 }
 ;
 dl_h : dl_h2 dl_tag
@@ -204,6 +215,8 @@ dl_h : dl_h2 dl_tag
 dl_h2 : '<' T_dl atributos '>'//Agregado a la gramtica
 {
 	accionCabezaLeida_Arbl("dl");
+	elem="dl";
+	atributovalido(nombreAtributoLeido);
 }
 ;
 dd_h : dd_h2 dd_tag
@@ -211,6 +224,8 @@ dd_h : dd_h2 dd_tag
 dd_h2 : '<' T_dd atributos '>'//Agregado a la gramtica
 {
 	accionCabezaLeida_Arbl("dd");
+	elem="dd";
+	atributovalido(nombreAtributoLeido);
 }
 ;
 b_h : b_h2 b_tag
@@ -218,6 +233,8 @@ b_h : b_h2 b_tag
 b_h2 : '<' T_b atributos '>'//Agregado a la gramtica
 {
 	accionCabezaLeida_Arbl("b");
+	elem="b";
+	atributovalido(nombreAtributoLeido);
 }
 ;
 li_h : li_h2 li_tag
@@ -226,6 +243,7 @@ li_h2 : '<' T_li atributos '>'//Agregado a la gramtica
 {
 	accionCabezaLeida_Arbl("li");
 	elem="li";
+	atributovalido(nombreAtributoLeido);
 }
 ;
 strong_h: strong_h2 strong_tag
@@ -233,6 +251,8 @@ strong_h: strong_h2 strong_tag
 strong_h2 : '<' T_strong atributos '>'//Agregado a la gramtica
 {
 	accionCabezaLeida_Arbl("strong");
+	elem="strong";
+	atributovalido(nombreAtributoLeido);
 }
 ;
 style_h : style_h2 style_tag
@@ -240,6 +260,8 @@ style_h : style_h2 style_tag
 style_h2 : '<' T_style atributos '>'//Agregado a la gramtica
 {
 	accionCabezaLeida_Arbl("style");
+	elem="style";
+	atributovalido(nombreAtributoLeido);
 }
 ;
 blockquote_h : blockquote_h2 blockquote_tag
@@ -247,6 +269,8 @@ blockquote_h : blockquote_h2 blockquote_tag
 blockquote_h2 : '<' T_blockquote atributos '>'//Agregado a la gramtica
 {
 	accionCabezaLeida_Arbl("blockquote");
+	elem="blockquote";
+	atributovalido(nombreAtributoLeido);
 }
 ;
 embed_h : embed_h2 embed_tag
@@ -254,6 +278,8 @@ embed_h : embed_h2 embed_tag
 embed_h2 : '<' T_embed atributos '>'//Agregado a la gramtica
 {
 	accionCabezaLeida_Arbl("embed");
+	elem="embed";
+	atributovalido(nombreAtributoLeido);
 }
 ;
 link_h : link_h2 link_tag
@@ -261,6 +287,8 @@ link_h : link_h2 link_tag
 link_h2 : '<' T_link atributos '>'
 {
 	accionCabezaLeida_Arbl("link");
+	elem="link";
+	atributovalido(nombreAtributoLeido);
 }
 ;
 table_h : table_h2 table_tag
@@ -269,6 +297,7 @@ table_h2 : '<' T_table atributos '>'
 {
 	accionCabezaLeida_Arbl("table");
 	elem="table";
+	atributovalido(nombreAtributoLeido);
 }
 ;
 footer_h : footer_h2 footer_tag
@@ -276,6 +305,8 @@ footer_h : footer_h2 footer_tag
 footer_h2 : '<' T_footer atributos '>'
 {
 	accionCabezaLeida_Arbl("footer");
+	elem="footer";
+	atributovalido(nombreAtributoLeido);
 }
 ;
 td_h : td_h2 td_tag
@@ -284,6 +315,7 @@ td_h2 : '<' T_td atributos '>'
 {
 	accionCabezaLeida_Arbl("td");
 	elem="td";
+	atributovalido(nombreAtributoLeido);
 }
 ;
 br_h : br_h2 br_tag
@@ -291,6 +323,8 @@ br_h : br_h2 br_tag
 br_h2 : '<' T_br atributos '>'
 {
 	accionCabezaLeida_Arbl("br");
+	elem="br";
+	atributovalido(nombreAtributoLeido);
 }
 ;
 form_h : form_h2 form_tag
@@ -298,6 +332,8 @@ form_h : form_h2 form_tag
 form_h2 : '<' T_form atributos '>'
 {
 	accionCabezaLeida_Arbl("form");
+	elem="form";
+	atributovalido(nombreAtributoLeido);
 }
 ;
 object_h : object_h2 object_tag//Modificacion gramtica
@@ -306,6 +342,7 @@ object_h2: '<' T_object atributos '>'
 {
 	accionCabezaLeida_Arbl("object");
  	elem="object";
+	atributovalido(nombreAtributoLeido);
 }
 ;
 th_h : th_h2 th_tag
@@ -313,6 +350,8 @@ th_h : th_h2 th_tag
 th_h2 : '<' T_th atributos '>'
 {
 	accionCabezaLeida_Arbl("th");
+	elem="th";
+	atributovalido(nombreAtributoLeido);
 }
 ;
 button_h : button_h2 button_tag
@@ -320,6 +359,8 @@ button_h : button_h2 button_tag
 button_h2 : '<' T_button atributos '>'
 {
 	accionCabezaLeida_Arbl("button");
+	elem="button";
+	atributovalido(nombreAtributoLeido);
 }
 ;
 h1_h : h1_h2 h1_tag
@@ -328,6 +369,7 @@ h1_h2 : '<' T_h1 atributos '>'
 {
 	accionCabezaLeida_Arbl("h1");
  	elem="h1";
+	atributovalido(nombreAtributoLeido);
 }
 ;
 h2_h : h2_h2 h2_tag
@@ -335,6 +377,8 @@ h2_h : h2_h2 h2_tag
 h2_h2 : '<' T_h2 atributos '>'
 {
 	accionCabezaLeida_Arbl("h2");
+	elem="h2";
+	atributovalido(nombreAtributoLeido);
 }
 ;
 h3_h : h3_h2 h3_tag
@@ -342,6 +386,8 @@ h3_h : h3_h2 h3_tag
 h3_h2 : '<' T_h3 atributos '>'
 {
 	accionCabezaLeida_Arbl("h3");
+	elem="h3";
+	atributovalido(nombreAtributoLeido);
 }
 ;
 h4_h : h4_h2 h4_tag
@@ -349,6 +395,8 @@ h4_h : h4_h2 h4_tag
 h4_h2 : '<' T_h4 atributos '>'
 {
 	accionCabezaLeida_Arbl("h4");
+	elem="h4";
+	atributovalido(nombreAtributoLeido);
 }
 ;
 h5_h : h5_h2 h5_tag
@@ -356,6 +404,8 @@ h5_h : h5_h2 h5_tag
 h5_h2 : '<' T_h5 atributos '>'
 {
 	accionCabezaLeida_Arbl("h5");
+	elem="h5";
+	atributovalido(nombreAtributoLeido);
 }
 ;
 h6_h : h6_h2 h6_tag
@@ -363,6 +413,8 @@ h6_h : h6_h2 h6_tag
 h6_h2 : '<' T_h6 atributos '>'
 {
 	accionCabezaLeida_Arbl("h6");
+	elem="h6";
+	atributovalido(nombreAtributoLeido);
 }
 ;
 ol_h : ol_h2 ol_tag
@@ -370,6 +422,8 @@ ol_h : ol_h2 ol_tag
 ol_h2 : '<' T_ol atributos '>'
 {
 	accionCabezaLeida_Arbl("ol");
+	elem="ol";
+	atributovalido(nombreAtributoLeido);
 }
 ;
 tr_h : tr_h2 tr_tag
@@ -378,6 +432,7 @@ tr_h2 : '<' T_tr atributos '>'
 {
 	accionCabezaLeida_Arbl("tr");
 	elem="tr";
+	atributovalido(nombreAtributoLeido);
 }
 ;
 caption_h : caption_h2 caption_tag
@@ -385,6 +440,8 @@ caption_h : caption_h2 caption_tag
 caption_h2 : '<' T_caption atributos '>'
 {
 	accionCabezaLeida_Arbl("caption");
+	elem="caption";
+	atributovalido(nombreAtributoLeido);
 }
 ;
 option_h : option_h2 option_tag
@@ -392,6 +449,8 @@ option_h : option_h2 option_tag
 option_h2: '<' T_option atributos '>'
 {
 	accionCabezaLeida_Arbl("option");
+ 	elem="option";
+	atributovalido(nombreAtributoLeido);
 }
 ;
 textarea : textarea_h2 textarea_tag
@@ -399,6 +458,8 @@ textarea : textarea_h2 textarea_tag
 textarea_h2: '<' T_textarea atributos '>'
 {
 	accionCabezaLeida_Arbl("textarea");
+	elem="textarea";
+	atributovalido(nombreAtributoLeido);
 }
 ;
 code_h : code_h2 code_tag
@@ -406,6 +467,8 @@ code_h : code_h2 code_tag
 code_h2: '<' T_code atributos '>'
 {
 	accionCabezaLeida_Arbl("code");
+	elem="code";
+	atributovalido(nombreAtributoLeido);
 }
 ;
 header_h : header_h2 header_tag
@@ -413,6 +476,8 @@ header_h : header_h2 header_tag
 header_h2: '<' T_header atributos '>'
 {
 	accionCabezaLeida_Arbl("header");
+	elem="header";
+	atributovalido(nombreAtributoLeido);
 }
 ;
 p_h : p_h2 p_tag//Modificacion gramtica
@@ -421,6 +486,7 @@ p_h2: '<' T_p atributos '>'
 {
 	accionCabezaLeida_Arbl("p");
 	elem="p";
+	atributovalido(nombreAtributoLeido);
 }
 //Agregado a la gramatica
 ;
@@ -431,6 +497,7 @@ title_h2: '<' T_title atributos '>'
 	//Si hay algun texto en la lista pertenecen al padre de title
 	accionCabezaLeida_Arbl("title");
 	elem="title";
+	atributovalido(nombreAtributoLeido);
 }
 ;
 div_h : div_h2 div_tag
@@ -439,6 +506,7 @@ div_h2: '<' T_div atributos '>'
 {
 	accionCabezaLeida_Arbl("div");
 	elem="div";
+	atributovalido(nombreAtributoLeido);
 }
 ;
 hr_h : hr_h2 hr_tag
@@ -446,6 +514,8 @@ hr_h : hr_h2 hr_tag
 hr_h2: '<' T_hr atributos '>'
 {
 	accionCabezaLeida_Arbl("hr");
+	elem="hr";
+	atributovalido(nombreAtributoLeido);
 }
 ;
 pre_h : pre_h2 pre_tag
@@ -453,6 +523,8 @@ pre_h : pre_h2 pre_tag
 pre_h2: '<' T_pre atributos '>'
 {
 	accionCabezaLeida_Arbl("pre");
+	elem="pre";
+	atributovalido(nombreAtributoLeido);
 }
 ;
 ul_h : ul_h2 ul_tag
@@ -461,6 +533,7 @@ ul_h2: '<' T_ul atributos '>'
 {
 	accionCabezaLeida_Arbl("ul");
 	elem="ul";
+	atributovalido(nombreAtributoLeido);
 }
 ;
 input_h : input_h2 input_tag 
@@ -468,6 +541,8 @@ input_h : input_h2 input_tag
 input_h2: '<' T_input atributos '>'
 {
 	accionCabezaLeida_Arbl("input");
+	elem="input";
+	atributovalido(nombreAtributoLeido);
 }
 ;
 a_tag : text a_tag
@@ -1023,13 +1098,37 @@ void yyerror(const char* s)
  fprintf(stderr,"Error en linea %d, columna %d : %s\n", yylloc.first_line, yylloc.first_column, s);
 }
 
+void globalatributes(char* atr){
+	if(!strcmp(atr,"accesskey") || !strcmp(atr,"class") || !strcmp(atr,"contenteditable") || !strcmp(atr,"contextmenu") || !strcmp(atr,"dir") || !strcmp(atr,"draggable") || !strcmp(atr,"dropzone") || !strcmp(atr,"hidden") || !strcmp(atr,"id") || !strcmp(atr,"lang") || !strcmp(atr,"spellcheck") || !strcmp(atr,"style") || !strcmp(atr,"tabindex") || !strcmp(atr,"title") || !strcmp(atr,"translate")){}
+	else
+	printf("Error semantico: Atributo invalido  %s para elemento %s\n",atr, elem);
+	}
 void atributovalido(char* atr){
 	if(elem=="a"){
-	if(strcmp(atr,"href")==0 || strcmp(atr,"hreflang")==0 || strcmp(atr,"media")==0 || strcmp(atr,"rel")==0 || strcmp(atr,"target")==0 || strcmp(atr,"type")==0)
-	printf("bien");
+	if(!strcmp(atr,"href") || !strcmp(atr,"hreflang") || !strcmp(atr,"media") || !strcmp(atr,"rel") || !strcmp(atr,"target") || !strcmp(atr,"type")){}
 	else
-	printf("%s",atr);
+	printf("Error semantico: Atributo invalido  %s para elemento %s\n",atr, elem);
 	}
+	else if(elem=="b"){
+	globalatributes(atr);	
+	}
+	else if(elem=="blockquote"){
+	if(!strcmp(atr,"cite")){}
+	else
+	printf("Error semantico: Atributo invalido  %s para elemento %s\n",atr, elem);
+	}
+	else if(elem=="body" && atr!=NULL){
+	printf("Error semantico: Atributo invalido  %s para elemento %s\n",atr, elem);
+	}
+	else if(elem=="br"){
+	globalatributes(atr);
+	}
+	else if(elem=="button"){
+	if(!strcmp(atr,"autofocus") || !strcmp(atr,"disabled") || !strcmp(atr,"form") || !strcmp(atr,"formaction") || !strcmp(atr,"formenctype") || !strcmp(atr,"formmethod") || !strcmp(atr,"formnovalidate") || !strcmp(atr,"formtarget") || !strcmp(atr,"name") || !strcmp(atr,"type") || !strcmp(atr,"value")){}
+	else
+	printf("Error semantico: Atributo invalido  %s para elemento %s\n",atr, elem);
+	}
+	
 }
 
 
