@@ -65,6 +65,7 @@ html_h : '<'html atributos '>' {
 	agregarListaAtributos(nodoActual,listaTmp);
 	listaAtributosActual=crearListaAtributos();
 	elem="html";
+	if(nombreAtributoLeido!=NULL)
 	atributovalido(nombreAtributoLeido);
 }//Agregado a la gramatica
 ;
@@ -79,6 +80,7 @@ head_h2 : '<' head atributos '>' //Agregado a la gramatica
 	agregarListaAtributos(nodoActual,listaTmp);
 	listaAtributosActual=crearListaAtributos();
 	elem="head";
+	if(nombreAtributoLeido!=NULL)
 	atributovalido(nombreAtributoLeido);
 }//Agregado a la gramatica
 ;
@@ -99,6 +101,7 @@ meta : '<' T_meta atributos '/' '>'
 	listaAtributosActual=crearListaAtributos();
 	nodoActual= nodoActual->padre;
 	elem="meta";
+	if(nombreAtributoLeido!=NULL)
 	atributovalido(nombreAtributoLeido);
 }//Agregado a la gramatica
 ;
@@ -110,6 +113,7 @@ body_h: '<' T_body atributos '>' {
 	agregarListaAtributos(nodoActual,listaTmp);
 	listaAtributosActual=crearListaAtributos();
 	elem="body";
+	if(nombreAtributoLeido!=NULL)
 	atributovalido(nombreAtributoLeido);
 }//Agregado a la gramatica
 ;
@@ -170,6 +174,7 @@ a_h2 : '<' T_a atributos '>'//Agregado a la gramtica
 {
 	accionCabezaLeida_Arbl("a");
 	elem="a";
+	if(nombreAtributoLeido!=NULL)
 	atributovalido(nombreAtributoLeido);
 }
 ;
@@ -179,6 +184,7 @@ em_h2 : '<' T_em atributos '>'//Agregado a la gramtica
 {
 	accionCabezaLeida_Arbl("em");
 	elem="em";
+	if(nombreAtributoLeido!=NULL)
 	atributovalido(nombreAtributoLeido);
 }
 ;
@@ -188,6 +194,7 @@ dt_h2 : '<' T_dt atributos '>'//Agregado a la gramtica
 {
 	accionCabezaLeida_Arbl("dt");
 	elem="dt";
+	if(nombreAtributoLeido!=NULL)
 	atributovalido(nombreAtributoLeido);
 }
 ;
@@ -198,6 +205,7 @@ img_h : '<' T_img atributos '/''>'{
 	listaAtributosActual=crearListaAtributos();
 	nodoActual= nodoActual->padre;
 	elem="img";
+	if(nombreAtributoLeido!=NULL)
 	atributovalido(nombreAtributoLeido);
 }//Modificado borre img_tag !!!!!!!!!!!!!!!!!!!!!!!!!PREGUNTAR SI ES IMPORTANTE!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 ;
@@ -207,6 +215,7 @@ span_h2 : '<' T_span atributos '>'//Agregado a la gramtica
 {
 	accionCabezaLeida_Arbl("span");
 	elem="span";
+	if(nombreAtributoLeido!=NULL)
 	atributovalido(nombreAtributoLeido);
 }
 ;
@@ -216,6 +225,7 @@ dl_h2 : '<' T_dl atributos '>'//Agregado a la gramtica
 {
 	accionCabezaLeida_Arbl("dl");
 	elem="dl";
+	if(nombreAtributoLeido!=NULL)
 	atributovalido(nombreAtributoLeido);
 }
 ;
@@ -225,6 +235,7 @@ dd_h2 : '<' T_dd atributos '>'//Agregado a la gramtica
 {
 	accionCabezaLeida_Arbl("dd");
 	elem="dd";
+	if(nombreAtributoLeido!=NULL)
 	atributovalido(nombreAtributoLeido);
 }
 ;
@@ -234,6 +245,7 @@ b_h2 : '<' T_b atributos '>'//Agregado a la gramtica
 {
 	accionCabezaLeida_Arbl("b");
 	elem="b";
+	if(nombreAtributoLeido!=NULL)
 	atributovalido(nombreAtributoLeido);
 }
 ;
@@ -243,6 +255,7 @@ li_h2 : '<' T_li atributos '>'//Agregado a la gramtica
 {
 	accionCabezaLeida_Arbl("li");
 	elem="li";
+	if(nombreAtributoLeido!=NULL)
 	atributovalido(nombreAtributoLeido);
 }
 ;
@@ -252,6 +265,7 @@ strong_h2 : '<' T_strong atributos '>'//Agregado a la gramtica
 {
 	accionCabezaLeida_Arbl("strong");
 	elem="strong";
+	if(nombreAtributoLeido!=NULL)
 	atributovalido(nombreAtributoLeido);
 }
 ;
@@ -261,6 +275,7 @@ style_h2 : '<' T_style atributos '>'//Agregado a la gramtica
 {
 	accionCabezaLeida_Arbl("style");
 	elem="style";
+	if(nombreAtributoLeido!=NULL)
 	atributovalido(nombreAtributoLeido);
 }
 ;
@@ -270,6 +285,7 @@ blockquote_h2 : '<' T_blockquote atributos '>'//Agregado a la gramtica
 {
 	accionCabezaLeida_Arbl("blockquote");
 	elem="blockquote";
+	if(nombreAtributoLeido!=NULL)
 	atributovalido(nombreAtributoLeido);
 }
 ;
@@ -279,6 +295,7 @@ embed_h2 : '<' T_embed atributos '>'//Agregado a la gramtica
 {
 	accionCabezaLeida_Arbl("embed");
 	elem="embed";
+	if(nombreAtributoLeido!=NULL)
 	atributovalido(nombreAtributoLeido);
 }
 ;
@@ -288,6 +305,7 @@ link_h2 : '<' T_link atributos '>'
 {
 	accionCabezaLeida_Arbl("link");
 	elem="link";
+	if(nombreAtributoLeido!=NULL)
 	atributovalido(nombreAtributoLeido);
 }
 ;
@@ -297,6 +315,7 @@ table_h2 : '<' T_table atributos '>'
 {
 	accionCabezaLeida_Arbl("table");
 	elem="table";
+	if(nombreAtributoLeido!=NULL)
 	atributovalido(nombreAtributoLeido);
 }
 ;
@@ -306,6 +325,7 @@ footer_h2 : '<' T_footer atributos '>'
 {
 	accionCabezaLeida_Arbl("footer");
 	elem="footer";
+	if(nombreAtributoLeido!=NULL)
 	atributovalido(nombreAtributoLeido);
 }
 ;
@@ -315,6 +335,7 @@ td_h2 : '<' T_td atributos '>'
 {
 	accionCabezaLeida_Arbl("td");
 	elem="td";
+	if(nombreAtributoLeido!=NULL)
 	atributovalido(nombreAtributoLeido);
 }
 ;
@@ -324,6 +345,7 @@ br_h2 : '<' T_br atributos '>'
 {
 	accionCabezaLeida_Arbl("br");
 	elem="br";
+	if(nombreAtributoLeido!=NULL)
 	atributovalido(nombreAtributoLeido);
 }
 ;
@@ -333,6 +355,7 @@ form_h2 : '<' T_form atributos '>'
 {
 	accionCabezaLeida_Arbl("form");
 	elem="form";
+	if(nombreAtributoLeido!=NULL)
 	atributovalido(nombreAtributoLeido);
 }
 ;
@@ -342,6 +365,7 @@ object_h2: '<' T_object atributos '>'
 {
 	accionCabezaLeida_Arbl("object");
  	elem="object";
+	if(nombreAtributoLeido!=NULL)
 	atributovalido(nombreAtributoLeido);
 }
 ;
@@ -351,6 +375,7 @@ th_h2 : '<' T_th atributos '>'
 {
 	accionCabezaLeida_Arbl("th");
 	elem="th";
+	if(nombreAtributoLeido!=NULL)
 	atributovalido(nombreAtributoLeido);
 }
 ;
@@ -360,6 +385,7 @@ button_h2 : '<' T_button atributos '>'
 {
 	accionCabezaLeida_Arbl("button");
 	elem="button";
+	if(nombreAtributoLeido!=NULL)
 	atributovalido(nombreAtributoLeido);
 }
 ;
@@ -369,6 +395,7 @@ h1_h2 : '<' T_h1 atributos '>'
 {
 	accionCabezaLeida_Arbl("h1");
  	elem="h1";
+	if(nombreAtributoLeido!=NULL)
 	atributovalido(nombreAtributoLeido);
 }
 ;
@@ -378,6 +405,7 @@ h2_h2 : '<' T_h2 atributos '>'
 {
 	accionCabezaLeida_Arbl("h2");
 	elem="h2";
+	if(nombreAtributoLeido!=NULL)
 	atributovalido(nombreAtributoLeido);
 }
 ;
@@ -387,6 +415,7 @@ h3_h2 : '<' T_h3 atributos '>'
 {
 	accionCabezaLeida_Arbl("h3");
 	elem="h3";
+	if(nombreAtributoLeido!=NULL)
 	atributovalido(nombreAtributoLeido);
 }
 ;
@@ -396,6 +425,7 @@ h4_h2 : '<' T_h4 atributos '>'
 {
 	accionCabezaLeida_Arbl("h4");
 	elem="h4";
+	if(nombreAtributoLeido!=NULL)
 	atributovalido(nombreAtributoLeido);
 }
 ;
@@ -405,6 +435,7 @@ h5_h2 : '<' T_h5 atributos '>'
 {
 	accionCabezaLeida_Arbl("h5");
 	elem="h5";
+	if(nombreAtributoLeido!=NULL)
 	atributovalido(nombreAtributoLeido);
 }
 ;
@@ -414,6 +445,7 @@ h6_h2 : '<' T_h6 atributos '>'
 {
 	accionCabezaLeida_Arbl("h6");
 	elem="h6";
+	if(nombreAtributoLeido!=NULL)
 	atributovalido(nombreAtributoLeido);
 }
 ;
@@ -423,6 +455,7 @@ ol_h2 : '<' T_ol atributos '>'
 {
 	accionCabezaLeida_Arbl("ol");
 	elem="ol";
+	if(nombreAtributoLeido!=NULL)
 	atributovalido(nombreAtributoLeido);
 }
 ;
@@ -432,6 +465,7 @@ tr_h2 : '<' T_tr atributos '>'
 {
 	accionCabezaLeida_Arbl("tr");
 	elem="tr";
+	if(nombreAtributoLeido!=NULL)
 	atributovalido(nombreAtributoLeido);
 }
 ;
@@ -441,6 +475,7 @@ caption_h2 : '<' T_caption atributos '>'
 {
 	accionCabezaLeida_Arbl("caption");
 	elem="caption";
+	if(nombreAtributoLeido!=NULL)
 	atributovalido(nombreAtributoLeido);
 }
 ;
@@ -450,6 +485,7 @@ option_h2: '<' T_option atributos '>'
 {
 	accionCabezaLeida_Arbl("option");
  	elem="option";
+	if(nombreAtributoLeido!=NULL)
 	atributovalido(nombreAtributoLeido);
 }
 ;
@@ -459,6 +495,7 @@ textarea_h2: '<' T_textarea atributos '>'
 {
 	accionCabezaLeida_Arbl("textarea");
 	elem="textarea";
+	if(nombreAtributoLeido!=NULL)
 	atributovalido(nombreAtributoLeido);
 }
 ;
@@ -468,6 +505,7 @@ code_h2: '<' T_code atributos '>'
 {
 	accionCabezaLeida_Arbl("code");
 	elem="code";
+	if(nombreAtributoLeido!=NULL)
 	atributovalido(nombreAtributoLeido);
 }
 ;
@@ -477,6 +515,7 @@ header_h2: '<' T_header atributos '>'
 {
 	accionCabezaLeida_Arbl("header");
 	elem="header";
+	if(nombreAtributoLeido!=NULL)
 	atributovalido(nombreAtributoLeido);
 }
 ;
@@ -486,6 +525,7 @@ p_h2: '<' T_p atributos '>'
 {
 	accionCabezaLeida_Arbl("p");
 	elem="p";
+	if(nombreAtributoLeido!=NULL)
 	atributovalido(nombreAtributoLeido);
 }
 //Agregado a la gramatica
@@ -497,6 +537,7 @@ title_h2: '<' T_title atributos '>'
 	//Si hay algun texto en la lista pertenecen al padre de title
 	accionCabezaLeida_Arbl("title");
 	elem="title";
+	if(nombreAtributoLeido!=NULL)
 	atributovalido(nombreAtributoLeido);
 }
 ;
@@ -506,6 +547,7 @@ div_h2: '<' T_div atributos '>'
 {
 	accionCabezaLeida_Arbl("div");
 	elem="div";
+	if(nombreAtributoLeido!=NULL)
 	atributovalido(nombreAtributoLeido);
 }
 ;
@@ -515,6 +557,7 @@ hr_h2: '<' T_hr atributos '>'
 {
 	accionCabezaLeida_Arbl("hr");
 	elem="hr";
+	if(nombreAtributoLeido!=NULL)
 	atributovalido(nombreAtributoLeido);
 }
 ;
@@ -524,6 +567,7 @@ pre_h2: '<' T_pre atributos '>'
 {
 	accionCabezaLeida_Arbl("pre");
 	elem="pre";
+	if(nombreAtributoLeido!=NULL)
 	atributovalido(nombreAtributoLeido);
 }
 ;
@@ -533,6 +577,7 @@ ul_h2: '<' T_ul atributos '>'
 {
 	accionCabezaLeida_Arbl("ul");
 	elem="ul";
+	if(nombreAtributoLeido!=NULL)
 	atributovalido(nombreAtributoLeido);
 }
 ;
@@ -542,6 +587,7 @@ input_h2: '<' T_input atributos '>'
 {
 	accionCabezaLeida_Arbl("input");
 	elem="input";
+	if(nombreAtributoLeido!=NULL)
 	atributovalido(nombreAtributoLeido);
 }
 ;
@@ -1103,6 +1149,7 @@ void globalatributes(char* atr){
 	else
 	printf("Error semantico: Atributo invalido  %s para elemento %s\n",atr, elem);
 	}
+
 void atributovalido(char* atr){
 	if(elem=="a"){
 	if(!strcmp(atr,"href") || !strcmp(atr,"hreflang") || !strcmp(atr,"media") || !strcmp(atr,"rel") || !strcmp(atr,"target") || !strcmp(atr,"type")){}
@@ -1117,10 +1164,7 @@ void atributovalido(char* atr){
 	else
 	printf("Error semantico: Atributo invalido  %s para elemento %s\n",atr, elem);
 	}
-	else if(elem=="body" && atr!=NULL){
-	printf("Error semantico: Atributo invalido  %s para elemento %s\n",atr, elem);
-	}
-	else if(elem=="br"){
+	else if(elem=="br" || elem=="dt" || elem=="dl" || elem=="dd" || elem=="em" || elem=="h1" || elem=="h2" || elem=="h3" || elem=="h4" || elem=="h5" || elem=="h6" || elem=="head" || elem=="hr" || elem=="span" || elem=="strong" || elem=="tr" || elem=="title" || elem=="p" || elem=="ul" || elem=="code" || elem=="div" || elem=="body"){
 	globalatributes(atr);
 	}
 	else if(elem=="button"){
@@ -1128,7 +1172,92 @@ void atributovalido(char* atr){
 	else
 	printf("Error semantico: Atributo invalido  %s para elemento %s\n",atr, elem);
 	}
-	
+	else if(elem=="caption"){
+	if(!strcmp(atr,"align")){}
+	else
+	globalatributes(atr);
+	}
+	else if(elem=="embed"){
+	if(!strcmp(atr,"height") || !strcmp(atr,"src") || !strcmp(atr,"type") || !strcmp(atr,"width")){}
+	else
+	globalatributes(atr);
+	}
+	else if(elem=="form"){
+	if(!strcmp(atr,"accept") || !strcmp(atr,"accept-charset") || !strcmp(atr,"action") || !strcmp(atr,"autocomplete") || !strcmp(atr,"enctype") || !strcmp(atr,"method") || !strcmp(atr,"name") || !strcmp(atr,"novalidate") || !strcmp(atr,"target")){}
+	else
+	globalatributes(atr);
+	}
+	else if(elem=="html"){
+	if(!strcmp(atr,"manifest")){}
+	else
+	globalatributes(atr);
+	}
+	else if(elem=="img"){
+	if(!strcmp(atr,"align") || !strcmp(atr,"alt") || !strcmp(atr,"border") || !strcmp(atr,"crossorigin") || !strcmp(atr,"height") || !strcmp(atr,"hspace") || !strcmp(atr,"ismap") || !strcmp(atr,"longdesc") || !strcmp(atr,"src") || !strcmp(atr,"usemap") || !strcmp(atr,"vspace") || !strcmp(atr,"width")){}
+	else
+	globalatributes(atr);
+	}
+	else if(elem=="input"){
+	if(!strcmp(atr,"align") || !strcmp(atr,"alt") || !strcmp(atr,"accept") || !strcmp(atr,"autocomplete") || !strcmp(atr,"autofocus") || !strcmp(atr,"checked") || !strcmp(atr,"disable") || !strcmp(atr,"form") || !strcmp(atr,"formaction") || !strcmp(atr,"formenctype") || !strcmp(atr,"formmethod") || !strcmp(atr,"formnovalidate") || !strcmp(atr,"formtarget") || !strcmp(atr,"height") || !strcmp(atr,"list") || !strcmp(atr,"max") || !strcmp(atr,"maxlength") || !strcmp(atr,"min") || !strcmp(atr,"multiple") || !strcmp(atr,"name") || !strcmp(atr,"pattern") || !strcmp(atr,"placeholder") || !strcmp(atr,"readonly") || !strcmp(atr,"required") || !strcmp(atr,"size") || !strcmp(atr,"src") || !strcmp(atr,"step") || !strcmp(atr,"type") || !strcmp(atr,"value") || !strcmp(atr,"width")){}
+	else
+	globalatributes(atr);
+	}
+	else if(elem=="li"){
+	if(!strcmp(atr,"type") || !strcmp(atr,"value")){}
+	else
+	globalatributes(atr);
+	}
+	else if(elem=="link"){
+	if(!strcmp(atr,"charset") || !strcmp(atr,"href") || !strcmp(atr,"hreflang") || !strcmp(atr,"media") || !strcmp(atr,"rel") || !strcmp(atr,"rev") || !strcmp(atr,"sizes") || !strcmp(atr,"target") || !strcmp(atr,"type")){}
+	else
+	globalatributes(atr);
+	}
+	else if(elem=="meta"){
+	if(!strcmp(atr,"charset") || !strcmp(atr,"content") || !strcmp(atr,"http-equiv") || !strcmp(atr,"name")){}
+	else
+	globalatributes(atr);
+	}
+	else if(elem=="ol"){
+	if(!strcmp(atr,"reversed") || !strcmp(atr,"start") || !strcmp(atr,"type")){}
+	else
+	globalatributes(atr);
+	}
+	else if(elem=="option"){
+	if(!strcmp(atr,"disabled") || !strcmp(atr,"label") || !strcmp(atr,"selected") || !strcmp(atr,"value")){}
+	else
+	globalatributes(atr);
+	}
+	else if(elem=="script"){
+	if(!strcmp(atr,"charset") || !strcmp(atr,"async") || !strcmp(atr,"defer") || !strcmp(atr,"src") || !strcmp(atr,"type")){}
+	else
+	globalatributes(atr);
+	}
+	else if(elem=="style"){
+	if(!strcmp(atr,"media") || !strcmp(atr,"scoped") || !strcmp(atr,"type")){}
+	else
+	globalatributes(atr);
+	}
+	else if(elem=="table"){
+	if(!strcmp(atr,"align") || !strcmp(atr,"bgcolor") || !strcmp(atr,"border") || !strcmp(atr,"cellpadding") || !strcmp(atr,"cellspacing") || !strcmp(atr,"frame") || !strcmp(atr,"rules") || !strcmp(atr,"summary") || !strcmp(atr,"width")){}
+	else
+	globalatributes(atr);
+	}
+	else if(elem=="td"){
+	if(!strcmp(atr,"colspan") || !strcmp(atr,"headers") || !strcmp(atr,"rowspan")){}
+	else
+	globalatributes(atr);
+	}
+	else if(elem=="th"){
+	if(!strcmp(atr,"colspan") || !strcmp(atr,"headers") || !strcmp(atr,"rowspan") || !strcmp(atr,"scope")){}
+	else
+	globalatributes(atr);
+	}
+	else if(elem=="textarea"){
+	if(!strcmp(atr,"autofocus") || !strcmp(atr,"cols") || !strcmp(atr,"disabled") || !strcmp(atr,"form") || !strcmp(atr,"maxlength") || !strcmp(atr,"name") || !strcmp(atr,"placeholder") || !strcmp(atr,"readonly") || !strcmp(atr,"required") || !strcmp(atr,"rows") || !strcmp(atr,"wrap")){}
+	else
+	globalatributes(atr);
+	}
+	nombreAtributoLeido=NULL;
 }
 
 
