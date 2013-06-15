@@ -1,3 +1,19 @@
+/*******************************************************************************************
+ * Tecnologico de Costa Rica                                                               *
+ * Ingieneria en Computación                                                               *
+ * Compiladores e Interpretes                                                              *
+ * Analizador Semantico xhtml                                                              *
+ * Tarea Programada 3                                                                      *
+ * semantico.c                                                                             *
+ * Archivo C que contiene la implementacion de                                             *
+ * variables y funciones necesitadas para realizar el analisis semantico                   *
+ *                                                                                         *
+ * Estudiantes: Joseph Araya Rojas                                                         *
+ *				Luis Prado Rodríguez                                                       *
+ *				Jean Carlo Cervantes                                                       *
+ *                                                                                         *
+ * Profesor: Andrei Fuentes                                                                *
+ * *****************************************************************************************/
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -33,7 +49,7 @@ int isExpReg(char* expReg, char* dato){
     int reti;
 
 /* Compile regular expression */
-  reti = regcomp(&regex, expReg, REG_EXTENDED|REG_NEWLINE);
+  	reti = regcomp(&regex, expReg, REG_EXTENDED|REG_NEWLINE);
 /* Execute regular expression */
     reti = regexec(&regex, dato, 0, NULL, 0);
     if(!reti){
@@ -46,14 +62,14 @@ int isExpReg(char* expReg, char* dato){
     	
 }
 
-void printErrorSemantico(char* elemento, char* atributo, char* valorAtributo){
-	fprintf(stderr,RED"Error semantico:"WHITE" Formato incorrecto en el valor: "BLUE"%s"WHITE", "WHITE"del atributo "BLUE"%s"WHITE", perteneciente al elemento  "BLUE"%s"WHITE".\n",valorAtributo, atributo,elemento);
+void printErrorSemantico(char* elemento, char* atributo, char* valorAtributo, int filaAtri, int columnaAtri, int filaValor, int columnaValor){
+	fprintf(stderr,RED"Error semantico:"WHITE" Fila: "BLUE"%d"WHITE" Columna: "BLUE"%d"WHITE" ,Formato incorrecto en el valor: "BLUE"%s"WHITE", "WHITE"del atributo "BLUE"%s"WHITE", perteneciente al elemento  "BLUE"%s"WHITE".\n",filaValor, columnaValor, valorAtributo, atributo,elemento);
 }
-void printErrorSemanticoAtributoInvalido(char* elemento, char* atributo, char* valorAtributo){
-	fprintf(stderr,RED"Error semantico: "WHITE"Atributo invalido "BLUE"%s"WHITE", para elemento "BLUE"%s"WHITE".\n",atributo, elemento);
+void printErrorSemanticoAtributoInvalido(char* elemento, char* atributo, char* valorAtributo, int filaAtri, int columnaAtri, int filaValor, int columnaValor){
+	fprintf(stderr,RED"Error semantico:"WHITE" Fila: "BLUE"%d"WHITE" Columna: "BLUE"%d"WHITE" ,Atributo invalido "BLUE"%s"WHITE", para elemento "BLUE"%s"WHITE".\n",filaAtri, columnaAtri,atributo, elemento);
 }
-int atributoValido(char* elemento, char* atributo, char* valorAtributo){
-	printf("%s %s %s\n",elemento, atributo, valorAtributo);
+int atributoValido(char* elemento, char* atributo, char* valorAtributo, int filaAtri, int columnaAtri, int filaValor, int columnaValor){
+	
 	/*************************************************************************************************
 	**************************************Verificación de atributos de a******************************
 	*************************************************************************************************/
@@ -61,7 +77,7 @@ int atributoValido(char* elemento, char* atributo, char* valorAtributo){
 		
 		if(!strcmp(atributo,"href")){
 			if(!isExpReg(url,valorAtributo)){
-				printErrorSemantico(elemento, atributo, valorAtributo);
+				printErrorSemantico(elemento, atributo, valorAtributo, filaAtri, columnaAtri, filaValor, columnaValor);
 				return -1;
 			}
 			else{
@@ -70,7 +86,7 @@ int atributoValido(char* elemento, char* atributo, char* valorAtributo){
 		}
 		else if(!strcmp(atributo,"hreflang")){
 			if(!isExpReg(languageCode,valorAtributo)){
-				printErrorSemantico(elemento, atributo, valorAtributo);
+				printErrorSemantico(elemento, atributo, valorAtributo, filaAtri, columnaAtri, filaValor, columnaValor);
 				return -1;
 			}
 			else{
@@ -81,7 +97,7 @@ int atributoValido(char* elemento, char* atributo, char* valorAtributo){
 			if( !strcmp(valorAtributo,"alternate") || !strcmp(valorAtributo,"author") || !strcmp(valorAtributo,"bookmark") || !strcmp(valorAtributo,"help") || !strcmp(valorAtributo,"license") || !strcmp(valorAtributo,"next") || !strcmp(valorAtributo,"nofollow") || !strcmp(valorAtributo,"noreferrer") || !strcmp(valorAtributo,"prefetch") || !strcmp(valorAtributo,"prev") || !strcmp(valorAtributo,"search") || !strcmp(valorAtributo,"tag"))
 				return 1;
 			else{
-				printErrorSemantico(elemento, atributo, valorAtributo);
+				printErrorSemantico(elemento, atributo, valorAtributo, filaAtri, columnaAtri, filaValor, columnaValor);
 				return -1;
 			}
 		}
@@ -89,11 +105,11 @@ int atributoValido(char* elemento, char* atributo, char* valorAtributo){
 			if( !strcmp(valorAtributo,"_blank") || !strcmp(valorAtributo,"_self") || !strcmp(valorAtributo,"_parent") || !strcmp(valorAtributo,"_top"))
 				return 1;
 			else{
-				printErrorSemantico(elemento, atributo, valorAtributo);
+				printErrorSemantico(elemento, atributo, valorAtributo, filaAtri, columnaAtri, filaValor, columnaValor);
 				return -1;
 			}
 		}
-		return globalatributes(elemento,atributo,valorAtributo);
+		return globalatributes(elemento,atributo,valorAtributo, filaAtri, columnaAtri, filaValor, columnaValor);
 	}
 	/*************************************************************************************************
 	**************************************Verificación de atributos de b******************************
@@ -107,7 +123,7 @@ int atributoValido(char* elemento, char* atributo, char* valorAtributo){
 	else if(!strcmp(elemento,"blockquote")){
 		if(!strcmp(atributo,"cite")){
 			if(!isExpReg(url,valorAtributo)){
-				printErrorSemantico(elemento, atributo, valorAtributo);
+				printErrorSemantico(elemento, atributo, valorAtributo, filaAtri, columnaAtri, filaValor, columnaValor);
 				return -1;
 			}
 			else{
@@ -115,7 +131,7 @@ int atributoValido(char* elemento, char* atributo, char* valorAtributo){
 			}
 		}
 		else
-			return globalatributes(elemento,atributo,valorAtributo);
+			return globalatributes(elemento,atributo,valorAtributo, filaAtri, columnaAtri, filaValor, columnaValor);
 			
 	}
 	/*************************************************************************************************
@@ -123,7 +139,7 @@ int atributoValido(char* elemento, char* atributo, char* valorAtributo){
 	*************************************************************************************************/
 	else if(!strcmp(elemento,"br") || !strcmp(elemento,"dt") || !strcmp(elemento,"dl") || !strcmp(elemento,"dd") || !strcmp(elemento,"em") || !strcmp(elemento,"h1") || !strcmp(elemento,"h2") || !strcmp(elemento,"h3") || !strcmp(elemento,"h4") || !strcmp(elemento,"h5") || !strcmp(elemento,"h6") || !strcmp(elemento,"head") || !strcmp(elemento,"hr") || !strcmp(elemento,"span") || !strcmp(elemento,"strong") || !strcmp(elemento,"tr") || !strcmp(elemento,"title") || !strcmp(elemento,"p") || !strcmp(elemento,"ul") || !strcmp(elemento,"code") || !strcmp(elemento,"div") || !strcmp(elemento,"body"))
 	{
-		return globalatributes(elemento, atributo, valorAtributo);
+		return globalatributes(elemento, atributo, valorAtributo, filaAtri, columnaAtri, filaAtri, columnaValor);
 	}
 	/*************************************************************************************************
 	**************************************Verificación de atributos de button*************************
@@ -134,7 +150,7 @@ int atributoValido(char* elemento, char* atributo, char* valorAtributo){
 				return 1;
 			else
 			{
-				printErrorSemantico(elemento, atributo, valorAtributo);
+				printErrorSemantico(elemento, atributo, valorAtributo, filaAtri, columnaAtri, filaValor, columnaValor);
 				return -1;
 			} 
 		}
@@ -143,13 +159,13 @@ int atributoValido(char* elemento, char* atributo, char* valorAtributo){
 				return 1;
 			else
 			{
-				printErrorSemantico(elemento, atributo, valorAtributo);
+				printErrorSemantico(elemento, atributo, valorAtributo, filaAtri, columnaAtri, filaValor, columnaValor);
 				return -1;
 			}
 		}
 		else if(!strcmp(atributo,"form")){
 			if(!isExpReg(texto,valorAtributo)){
-				printErrorSemantico(elemento, atributo, valorAtributo);
+				printErrorSemantico(elemento, atributo, valorAtributo, filaAtri, columnaAtri, filaValor, columnaValor);
 				return -1;
 			} 
 			else
@@ -157,7 +173,7 @@ int atributoValido(char* elemento, char* atributo, char* valorAtributo){
 		}
 		else if(!strcmp(atributo,"formaction")){
 			if(!isExpReg(url,valorAtributo)){
-				printErrorSemantico(elemento, atributo, valorAtributo);
+				printErrorSemantico(elemento, atributo, valorAtributo, filaAtri, columnaAtri, filaValor, columnaValor);
 				return -1;
 			}
 			else{
@@ -167,33 +183,33 @@ int atributoValido(char* elemento, char* atributo, char* valorAtributo){
 			if( !strcmp(valorAtributo,"application/x-www-form-urlencoded") || !strcmp(valorAtributo,"multipart/form-data") || !strcmp(valorAtributo,"text/plain"))
 				return 1;
 			else{
-				printErrorSemantico(elemento, atributo, valorAtributo);
+				printErrorSemantico(elemento, atributo, valorAtributo, filaAtri, columnaAtri, filaValor, columnaValor);
 				return -1;
 			}
 		}else if(!strcmp(atributo,"formmethod")){
 			if( !strcmp(valorAtributo,"get") || !strcmp(valorAtributo,"post"))
 				return 1;
 			else{
-				printErrorSemantico(elemento, atributo, valorAtributo);
+				printErrorSemantico(elemento, atributo, valorAtributo, filaAtri, columnaAtri, filaValor, columnaValor);
 				return -1;
 			}
 		}else if(!strcmp(atributo,"formnovalidate")){
 			if( !strcmp(valorAtributo,"formnovalidate"))
 				return 1;
 			else{
-				printErrorSemantico(elemento, atributo, valorAtributo);
+				printErrorSemantico(elemento, atributo, valorAtributo, filaAtri, columnaAtri, filaValor, columnaValor);
 				return -1;
 			}
 		}else if(!strcmp(atributo,"formtarget")){
 			if( !strcmp(valorAtributo,"formtarget"))
 				return 1;
 			else{
-				printErrorSemantico(elemento, atributo, valorAtributo);
+				printErrorSemantico(elemento, atributo, valorAtributo, filaAtri, columnaAtri, filaValor, columnaValor);
 				return -1;
 			}
 		}else if(!strcmp(atributo,"name")){
 			if(!isExpReg(texto,valorAtributo)){
-				printErrorSemantico(elemento, atributo, valorAtributo);
+				printErrorSemantico(elemento, atributo, valorAtributo, filaAtri, columnaAtri, filaValor, columnaValor);
 				return -1;
 			} 
 			else
@@ -203,13 +219,13 @@ int atributoValido(char* elemento, char* atributo, char* valorAtributo){
 			if( !strcmp(valorAtributo,"button") || !strcmp(valorAtributo,"reset") || !strcmp(valorAtributo,"submit"))
 				return 1;
 			else{
-				printErrorSemantico(elemento, atributo, valorAtributo);
+				printErrorSemantico(elemento, atributo, valorAtributo, filaAtri, columnaAtri, filaValor, columnaValor);
 				return -1;
 			}
 
 		}else if(!strcmp(atributo,"value")){
 			if(!isExpReg(texto,valorAtributo)){
-				printErrorSemantico(elemento, atributo, valorAtributo);
+				printErrorSemantico(elemento, atributo, valorAtributo, filaAtri, columnaAtri, filaValor, columnaValor);
 				return -1;
 			} 
 			else
@@ -228,7 +244,7 @@ int atributoValido(char* elemento, char* atributo, char* valorAtributo){
 			if( !strcmp(valorAtributo,"left") || !strcmp(valorAtributo,"right") || !strcmp(valorAtributo,"top") || !strcmp(valorAtributo,"botton"))
 				return 1;
 			else{
-				printErrorSemantico(elemento, atributo, valorAtributo);
+				printErrorSemantico(elemento, atributo, valorAtributo, filaAtri, columnaAtri, filaValor, columnaValor);
 				return -1;
 			}
 		}
@@ -243,7 +259,7 @@ int atributoValido(char* elemento, char* atributo, char* valorAtributo){
 	else if(!strcmp(elemento,"embed")){
 		if(!strcmp(atributo,"height")){
 			if(!isExpReg(numero,valorAtributo)){
-				printErrorSemantico(elemento, atributo, valorAtributo);
+				printErrorSemantico(elemento, atributo, valorAtributo, filaAtri, columnaAtri, filaValor, columnaValor);
 				return -1;
 			}
 			else{
@@ -252,7 +268,7 @@ int atributoValido(char* elemento, char* atributo, char* valorAtributo){
 		}
 		else if(!strcmp(atributo,"src")){
 			if(!isExpReg(url,valorAtributo)){
-				printErrorSemantico(elemento, atributo, valorAtributo);
+				printErrorSemantico(elemento, atributo, valorAtributo, filaAtri, columnaAtri, filaValor, columnaValor);
 				return -1;
 			}
 			else{
@@ -263,7 +279,7 @@ int atributoValido(char* elemento, char* atributo, char* valorAtributo){
 						//**Type no se implemento porque utiliza MmType!**
 		else if(!strcmp(atributo,"width")){
 			if(!isExpReg(numero,valorAtributo)){
-				printErrorSemantico(elemento, atributo, valorAtributo);
+				printErrorSemantico(elemento, atributo, valorAtributo, filaAtri, columnaAtri, filaValor, columnaValor);
 				return -1;
 			}
 			else{
@@ -281,7 +297,7 @@ int atributoValido(char* elemento, char* atributo, char* valorAtributo){
 						//**Accept no se implemento porque utiliza MmType!**
 		if(!strcmp(atributo,"accept-charset")){
 			if(!isExpReg(codificacion,valorAtributo)){
-				printErrorSemantico(elemento, atributo, valorAtributo);
+				printErrorSemantico(elemento, atributo, valorAtributo, filaAtri, columnaAtri, filaValor, columnaValor);
 				return -1;
 			}
 			else{
@@ -290,7 +306,7 @@ int atributoValido(char* elemento, char* atributo, char* valorAtributo){
 		} 
 		else if(!strcmp(atributo,"action")){
 			if(!isExpReg(url,valorAtributo)){
-				printErrorSemantico(elemento, atributo, valorAtributo);
+				printErrorSemantico(elemento, atributo, valorAtributo, filaAtri, columnaAtri, filaValor, columnaValor);
 				return -1;
 			}
 			else{
@@ -301,14 +317,14 @@ int atributoValido(char* elemento, char* atributo, char* valorAtributo){
 			if( !strcmp(valorAtributo,"on") || !strcmp(valorAtributo,"off"))
 				return 1;
 			else{
-				printErrorSemantico(elemento, atributo, valorAtributo);
+				printErrorSemantico(elemento, atributo, valorAtributo, filaAtri, columnaAtri, filaValor, columnaValor);
 				return -1;
 			}
 		}else if(!strcmp(atributo,"enctype")){
 			if( !strcmp(valorAtributo,"application/x-www-form-urlencoded") || !strcmp(valorAtributo,"multipart/form-data") || !strcmp(valorAtributo,"text/plain"))
 				return 1;
 			else{
-				printErrorSemantico(elemento, atributo, valorAtributo);
+				printErrorSemantico(elemento, atributo, valorAtributo, filaAtri, columnaAtri, filaValor, columnaValor);
 				return -1;
 			}
 		}
@@ -316,13 +332,13 @@ int atributoValido(char* elemento, char* atributo, char* valorAtributo){
 			if( !strcmp(valorAtributo,"get") || !strcmp(valorAtributo,"post"))
 				return 1;
 			else{
-				printErrorSemantico(elemento, atributo, valorAtributo);
+				printErrorSemantico(elemento, atributo, valorAtributo, filaAtri, columnaAtri, filaValor, columnaValor);
 				return -1;
 			}
 
 		}else if(!strcmp(atributo,"name")){
 			if(!isExpReg(texto,valorAtributo)){
-				printErrorSemantico(elemento, atributo, valorAtributo);
+				printErrorSemantico(elemento, atributo, valorAtributo, filaAtri, columnaAtri, filaValor, columnaValor);
 				return -1;
 			}
 			else{
@@ -333,18 +349,18 @@ int atributoValido(char* elemento, char* atributo, char* valorAtributo){
 			if( !strcmp(valorAtributo,"novalidate"))
 				return 1;
 			else{
-				printErrorSemantico(elemento, atributo, valorAtributo);
+				printErrorSemantico(elemento, atributo, valorAtributo, filaAtri, columnaAtri, filaValor, columnaValor);
 				return -1;
 			}
 		}else if(!strcmp(atributo,"target")){
 			if( !strcmp(valorAtributo,"_blank") || !strcmp(valorAtributo,"_self") || !strcmp(valorAtributo,"_parent") || !strcmp(valorAtributo,"_top"))
 				return 1;
 			else{
-				printErrorSemantico(elemento, atributo, valorAtributo);
+				printErrorSemantico(elemento, atributo, valorAtributo, filaAtri, columnaAtri, filaValor, columnaValor);
 				return -1;
 			}
 		}
-		return globalatributes(elemento,atributo,valorAtributo);
+		return globalatributes(elemento,atributo,valorAtributo, filaAtri, columnaAtri, filaValor, columnaValor);
 	}
 
 	/*************************************************************************************************
@@ -354,7 +370,7 @@ int atributoValido(char* elemento, char* atributo, char* valorAtributo){
 	else if(!strcmp(elemento,"html")){
 		if(!strcmp(atributo,"manifest")){
 			if(!isExpReg(url,valorAtributo)){
-				printErrorSemantico(elemento, atributo, valorAtributo);
+				printErrorSemantico(elemento, atributo, valorAtributo, filaAtri, columnaAtri, filaValor, columnaValor);
 				return -1;
 			}
 			else{
@@ -364,7 +380,7 @@ int atributoValido(char* elemento, char* atributo, char* valorAtributo){
 			if( !strcmp(valorAtributo,"http://www.w3.org/1999/xhtml"))
 				return 1;
 			else{
-				printErrorSemantico(elemento, atributo, valorAtributo);
+				printErrorSemantico(elemento, atributo, valorAtributo, filaAtri, columnaAtri, filaValor, columnaValor);
 				return -1;
 			}
 		}
@@ -382,13 +398,13 @@ int atributoValido(char* elemento, char* atributo, char* valorAtributo){
 			if( !strcmp(valorAtributo,"left") || !strcmp(valorAtributo,"right") || !strcmp(valorAtributo,"top") || !strcmp(valorAtributo,"botton") || !strcmp(valorAtributo,"middle"))
 				return 1;
 			else{
-				printErrorSemantico(elemento, atributo, valorAtributo);
+				printErrorSemantico(elemento, atributo, valorAtributo, filaAtri, columnaAtri, filaValor, columnaValor);
 				return -1;
 			}
 		}
 		else if(!strcmp(atributo,"alt")) {
 			if(!isExpReg(textoWithSpace,valorAtributo)){
-				printErrorSemantico(elemento, atributo, valorAtributo);
+				printErrorSemantico(elemento, atributo, valorAtributo, filaAtri, columnaAtri, filaValor, columnaValor);
 				return -1;
 			}
 			else
@@ -396,7 +412,7 @@ int atributoValido(char* elemento, char* atributo, char* valorAtributo){
 			}
 		else if(!strcmp(atributo,"border")){
 			if(!isExpReg(numero,valorAtributo)){
-				printErrorSemantico(elemento, atributo, valorAtributo);
+				printErrorSemantico(elemento, atributo, valorAtributo, filaAtri, columnaAtri, filaValor, columnaValor);
 				return -1;
 			}
 			else{
@@ -407,13 +423,13 @@ int atributoValido(char* elemento, char* atributo, char* valorAtributo){
 			if( !strcmp(valorAtributo,"anonymous") || !strcmp(valorAtributo,"use-credentials"))
 				return 1;
 			else{
-				printErrorSemantico(elemento, atributo, valorAtributo);
+				printErrorSemantico(elemento, atributo, valorAtributo, filaAtri, columnaAtri, filaValor, columnaValor);
 				return -1;
 			}
 		}
 		else if(!strcmp(atributo,"height")){
 			if(!isExpReg(numero,valorAtributo)){
-				printErrorSemantico(elemento, atributo, valorAtributo);
+				printErrorSemantico(elemento, atributo, valorAtributo, filaAtri, columnaAtri, filaValor, columnaValor);
 				return -1;
 			}
 			else{
@@ -422,7 +438,7 @@ int atributoValido(char* elemento, char* atributo, char* valorAtributo){
 		}
 		else if(!strcmp(atributo,"hspace")){
 			if(!isExpReg(numero,valorAtributo)){
-				printErrorSemantico(elemento, atributo, valorAtributo);
+				printErrorSemantico(elemento, atributo, valorAtributo, filaAtri, columnaAtri, filaValor, columnaValor);
 				return -1;
 			}
 			else{
@@ -433,13 +449,13 @@ int atributoValido(char* elemento, char* atributo, char* valorAtributo){
 			if( !strcmp(valorAtributo,"ismap"))
 				return 1;
 			else{
-				printErrorSemantico(elemento, atributo, valorAtributo);
+				printErrorSemantico(elemento, atributo, valorAtributo, filaAtri, columnaAtri, filaValor, columnaValor);
 				return -1;
 			}
 		}
 		else if(!strcmp(atributo,"longdesc")){
 			if(!isExpReg(url,valorAtributo)){
-				printErrorSemantico(elemento, atributo, valorAtributo);
+				printErrorSemantico(elemento, atributo, valorAtributo, filaAtri, columnaAtri, filaValor, columnaValor);
 				return -1;
 			}
 			else{
@@ -448,7 +464,7 @@ int atributoValido(char* elemento, char* atributo, char* valorAtributo){
 		}
 		else if(!strcmp(atributo,"src")){
 			if(!isExpReg(url,valorAtributo)){
-				printErrorSemantico(elemento, atributo, valorAtributo);
+				printErrorSemantico(elemento, atributo, valorAtributo, filaAtri, columnaAtri, filaValor, columnaValor);
 				return -1;
 			}
 			else{
@@ -457,7 +473,7 @@ int atributoValido(char* elemento, char* atributo, char* valorAtributo){
 		}
 		else if(!strcmp(atributo,"usemap")){
 			if(!isExpReg(usemap,valorAtributo)){//Indica que no cumple con las condiciones de un usemap
-				printErrorSemantico(elemento, atributo, valorAtributo);
+				printErrorSemantico(elemento, atributo, valorAtributo, filaAtri, columnaAtri, filaValor, columnaValor);
 				return -1;
 			}
 			else{
@@ -466,7 +482,7 @@ int atributoValido(char* elemento, char* atributo, char* valorAtributo){
 		}
 		else if(!strcmp(atributo,"vspace")){
 			if(!isExpReg(numero,valorAtributo)){
-				printErrorSemantico(elemento, atributo, valorAtributo);
+				printErrorSemantico(elemento, atributo, valorAtributo, filaAtri, columnaAtri, filaValor, columnaValor);
 				return -1;
 			}
 			else{
@@ -476,7 +492,7 @@ int atributoValido(char* elemento, char* atributo, char* valorAtributo){
 		}
 		else if(!strcmp(atributo,"width")){
 			if(!isExpReg(numero,valorAtributo)){
-				printErrorSemantico(elemento, atributo, valorAtributo);
+				printErrorSemantico(elemento, atributo, valorAtributo, filaAtri, columnaAtri, filaValor, columnaValor);
 				return -1;
 			}
 			else{
@@ -494,13 +510,13 @@ int atributoValido(char* elemento, char* atributo, char* valorAtributo){
 			if( !strcmp(valorAtributo,"left") || !strcmp(valorAtributo,"right") || !strcmp(valorAtributo,"top") || !strcmp(valorAtributo,"botton") || !strcmp(valorAtributo,"middle"))
 				return 1;
 			else{
-				printErrorSemantico(elemento, atributo, valorAtributo);
+				printErrorSemantico(elemento, atributo, valorAtributo, filaAtri, columnaAtri, filaValor, columnaValor);
 				return -1;
 			}
 		}
 		else if(!strcmp(atributo,"alt")){
 			if(!isExpReg(textoWithSpace,valorAtributo)){
-				printErrorSemantico(elemento, atributo, valorAtributo);
+				printErrorSemantico(elemento, atributo, valorAtributo, filaAtri, columnaAtri, filaValor, columnaValor);
 				return -1;
 			}
 			else{
@@ -511,7 +527,7 @@ int atributoValido(char* elemento, char* atributo, char* valorAtributo){
 			if( !strcmp(valorAtributo,"on") || !strcmp(valorAtributo,"off"))
 				return 1;
 			else{
-				printErrorSemantico(elemento, atributo, valorAtributo);
+				printErrorSemantico(elemento, atributo, valorAtributo, filaAtri, columnaAtri, filaValor, columnaValor);
 				return -1;
 			}
 		}
@@ -520,7 +536,7 @@ int atributoValido(char* elemento, char* atributo, char* valorAtributo){
 				return 1;
 			else
 			{
-				printErrorSemantico(elemento, atributo, valorAtributo);
+				printErrorSemantico(elemento, atributo, valorAtributo, filaAtri, columnaAtri, filaValor, columnaValor);
 				return -1;
 			} 
 		}
@@ -529,7 +545,7 @@ int atributoValido(char* elemento, char* atributo, char* valorAtributo){
 				return 1;
 			else
 			{
-				printErrorSemantico(elemento, atributo, valorAtributo);
+				printErrorSemantico(elemento, atributo, valorAtributo, filaAtri, columnaAtri, filaValor, columnaValor);
 				return -1;
 			}
 		}
@@ -538,13 +554,13 @@ int atributoValido(char* elemento, char* atributo, char* valorAtributo){
 				return 1;
 			else
 			{
-				printErrorSemantico(elemento, atributo, valorAtributo);
+				printErrorSemantico(elemento, atributo, valorAtributo, filaAtri, columnaAtri, filaValor, columnaValor);
 				return -1;
 			}
 		}
 		else if(!strcmp(atributo,"form")){
 			if(!isExpReg(texto,valorAtributo)){
-				printErrorSemantico(elemento, atributo, valorAtributo);
+				printErrorSemantico(elemento, atributo, valorAtributo, filaAtri, columnaAtri, filaValor, columnaValor);
 				return -1;
 			}
 			else{
@@ -553,7 +569,7 @@ int atributoValido(char* elemento, char* atributo, char* valorAtributo){
 		}
 		else if(!strcmp(atributo,"formaction")){
 			if(!isExpReg(url,valorAtributo)){
-				printErrorSemantico(elemento, atributo, valorAtributo);
+				printErrorSemantico(elemento, atributo, valorAtributo, filaAtri, columnaAtri, filaValor, columnaValor);
 				return -1;
 			}
 			else{
@@ -564,14 +580,14 @@ int atributoValido(char* elemento, char* atributo, char* valorAtributo){
 			if( !strcmp(valorAtributo,"application/x-www-form-urlencoded") || !strcmp(valorAtributo,"multipart/form-data") || !strcmp(valorAtributo,"text/plain"))
 				return 1;
 			else{
-				printErrorSemantico(elemento, atributo, valorAtributo);
+				printErrorSemantico(elemento, atributo, valorAtributo, filaAtri, columnaAtri, filaValor, columnaValor);
 			}
 		}
 		else if(!strcmp(atributo,"formmethod")){
 			if( !strcmp(valorAtributo,"get") || !strcmp(valorAtributo,"post"))
 				return 1;
 			else{
-				printErrorSemantico(elemento, atributo, valorAtributo);
+				printErrorSemantico(elemento, atributo, valorAtributo, filaAtri, columnaAtri, filaValor, columnaValor);
 				return -1;
 			}
 		}
@@ -579,7 +595,7 @@ int atributoValido(char* elemento, char* atributo, char* valorAtributo){
 			if( !strcmp(valorAtributo,"formnovalidate"))
 				return 1;
 			else{
-				printErrorSemantico(elemento, atributo, valorAtributo);
+				printErrorSemantico(elemento, atributo, valorAtributo, filaAtri, columnaAtri, filaValor, columnaValor);
 				return -1;
 			}
 		}
@@ -587,13 +603,13 @@ int atributoValido(char* elemento, char* atributo, char* valorAtributo){
 			if( !strcmp(valorAtributo,"formtarget"))
 				return 1;
 			else{
-				printErrorSemantico(elemento, atributo, valorAtributo);
+				printErrorSemantico(elemento, atributo, valorAtributo, filaAtri, columnaAtri, filaValor, columnaValor);
 				return -1;
 			}
 		}
 		else if(!strcmp(atributo,"height")){
 			if(!isExpReg(numero,valorAtributo)){
-				printErrorSemantico(elemento, atributo, valorAtributo);
+				printErrorSemantico(elemento, atributo, valorAtributo, filaAtri, columnaAtri, filaValor, columnaValor);
 				return -1;
 			}
 			else{
@@ -602,7 +618,7 @@ int atributoValido(char* elemento, char* atributo, char* valorAtributo){
 		}
 		else if(!strcmp(atributo,"list")){
 			if(!isExpReg(texto,valorAtributo)){
-				printErrorSemantico(elemento, atributo, valorAtributo);
+				printErrorSemantico(elemento, atributo, valorAtributo, filaAtri, columnaAtri, filaValor, columnaValor);
 				return -1;
 			}
 			else{
@@ -611,7 +627,7 @@ int atributoValido(char* elemento, char* atributo, char* valorAtributo){
 		}
 		else if(!strcmp(atributo,"max")){
 			if(!isExpReg(numero,valorAtributo) && !isExpReg(fecha, valorAtributo)){
-				printErrorSemantico(elemento, atributo, valorAtributo);
+				printErrorSemantico(elemento, atributo, valorAtributo, filaAtri, columnaAtri, filaValor, columnaValor);
 				return -1;
 			}
 			else{
@@ -620,7 +636,7 @@ int atributoValido(char* elemento, char* atributo, char* valorAtributo){
 		}
 		else if(!strcmp(atributo,"maxlength")){
 			if(!isExpReg(numero,valorAtributo)){
-				printErrorSemantico(elemento, atributo, valorAtributo);
+				printErrorSemantico(elemento, atributo, valorAtributo, filaAtri, columnaAtri, filaValor, columnaValor);
 				return -1;
 			}
 			else{
@@ -629,7 +645,7 @@ int atributoValido(char* elemento, char* atributo, char* valorAtributo){
 		}
 		else if(!strcmp(atributo,"min")){
 			if(!isExpReg(numero,valorAtributo) && !isExpReg(fecha, valorAtributo)){
-				printErrorSemantico(elemento, atributo, valorAtributo);
+				printErrorSemantico(elemento, atributo, valorAtributo, filaAtri, columnaAtri, filaValor, columnaValor);
 				return -1;
 			}
 			else{
@@ -640,13 +656,13 @@ int atributoValido(char* elemento, char* atributo, char* valorAtributo){
 			if( !strcmp(valorAtributo,"multiple"))
 				return 1;
 			else{
-				printErrorSemantico(elemento, atributo, valorAtributo);
+				printErrorSemantico(elemento, atributo, valorAtributo, filaAtri, columnaAtri, filaValor, columnaValor);
 				return -1;
 			}
 		}
 		else if(!strcmp(atributo,"name")){
 			if(!isExpReg(texto,valorAtributo)){
-				printErrorSemantico(elemento, atributo, valorAtributo);
+				printErrorSemantico(elemento, atributo, valorAtributo, filaAtri, columnaAtri, filaValor, columnaValor);
 				return -1;
 			}
 			else{
@@ -659,7 +675,7 @@ int atributoValido(char* elemento, char* atributo, char* valorAtributo){
 		}
 		else if(!strcmp(atributo,"placeholder")){
 			if(!isExpReg(textoWithSpace,valorAtributo)){
-				printErrorSemantico(elemento, atributo, valorAtributo);
+				printErrorSemantico(elemento, atributo, valorAtributo, filaAtri, columnaAtri, filaValor, columnaValor);
 				return -1;
 			}
 			else{
@@ -670,7 +686,7 @@ int atributoValido(char* elemento, char* atributo, char* valorAtributo){
 			if(!strcmp(valorAtributo,"readonly"))
 				return 1;
 			else{
-				printErrorSemantico(elemento, atributo, valorAtributo);
+				printErrorSemantico(elemento, atributo, valorAtributo, filaAtri, columnaAtri, filaValor, columnaValor);
 				return -1;
 			}
 		}
@@ -678,13 +694,13 @@ int atributoValido(char* elemento, char* atributo, char* valorAtributo){
 			if( !strcmp(valorAtributo,"required"))
 				return 1;
 			else{
-				printErrorSemantico(elemento, atributo, valorAtributo);
+				printErrorSemantico(elemento, atributo, valorAtributo, filaAtri, columnaAtri, filaValor, columnaValor);
 				return -1;
 			}
 		}
 		else if(!strcmp(atributo,"size")){
 			if(!isExpReg(numero,valorAtributo) && !isExpReg(fecha, valorAtributo)){
-				printErrorSemantico(elemento, atributo, valorAtributo);
+				printErrorSemantico(elemento, atributo, valorAtributo, filaAtri, columnaAtri, filaValor, columnaValor);
 				return -1;
 			}
 			else{
@@ -693,7 +709,7 @@ int atributoValido(char* elemento, char* atributo, char* valorAtributo){
 		}
 		else if(!strcmp(atributo,"src")){
 			if(!isExpReg(url,valorAtributo)){
-				printErrorSemantico(elemento, atributo, valorAtributo);
+				printErrorSemantico(elemento, atributo, valorAtributo, filaAtri, columnaAtri, filaValor, columnaValor);
 				return -1;
 			}
 			else{
@@ -702,7 +718,7 @@ int atributoValido(char* elemento, char* atributo, char* valorAtributo){
 		}
 		else if(!strcmp(atributo,"step")){
 			if(!isExpReg(numero,valorAtributo) && !isExpReg(fecha, valorAtributo)){
-				printErrorSemantico(elemento, atributo, valorAtributo);
+				printErrorSemantico(elemento, atributo, valorAtributo, filaAtri, columnaAtri, filaValor, columnaValor);
 				return -1;
 			}
 			else{
@@ -713,13 +729,13 @@ int atributoValido(char* elemento, char* atributo, char* valorAtributo){
 			if(!strcmp(valorAtributo,"button") || !strcmp(valorAtributo,"checkbox")|| !strcmp(valorAtributo,"color")|| !strcmp(valorAtributo,"date" ) || !strcmp(valorAtributo,"datetime") || !strcmp(valorAtributo,"datetime-local")|| !strcmp(valorAtributo,"email" ) || !strcmp(valorAtributo,"file")|| !strcmp(valorAtributo,"hidden")|| !strcmp(valorAtributo,"image")|| !strcmp(valorAtributo,"month" )|| !strcmp(valorAtributo,"number")|| !strcmp(valorAtributo,"password")|| !strcmp(valorAtributo,"radio")|| !strcmp(valorAtributo,"range")|| !strcmp(valorAtributo,"reset")|| !strcmp(valorAtributo,"search")|| !strcmp(valorAtributo,"submit")|| !strcmp(valorAtributo,"tel")|| !strcmp(valorAtributo,"text")||	!strcmp(valorAtributo,"time" )|| !strcmp(valorAtributo,"url")|| !strcmp(valorAtributo,"week" ))
 				return 1;
 			else{
-				printErrorSemantico(elemento, atributo, valorAtributo);
+				printErrorSemantico(elemento, atributo, valorAtributo, filaAtri, columnaAtri, filaValor, columnaValor);
 				return -1;
 			}
 		}
 		else if(!strcmp(atributo,"value")){
 			if(!isExpReg(textoWithSpace,valorAtributo)){
-				printErrorSemantico(elemento, atributo, valorAtributo);
+				printErrorSemantico(elemento, atributo, valorAtributo, filaAtri, columnaAtri, filaValor, columnaValor);
 				return -1;
 			}
 			else{
@@ -729,7 +745,7 @@ int atributoValido(char* elemento, char* atributo, char* valorAtributo){
 		else if(!strcmp(atributo,"width"))
 		{
 			if(!isExpReg(numero,valorAtributo) && !isExpReg(fecha, valorAtributo)){
-				printErrorSemantico(elemento, atributo, valorAtributo);
+				printErrorSemantico(elemento, atributo, valorAtributo, filaAtri, columnaAtri, filaValor, columnaValor);
 				return -1;
 			}
 			else{
@@ -749,13 +765,13 @@ int atributoValido(char* elemento, char* atributo, char* valorAtributo){
 			if(!strcmp(valorAtributo,"1") || !strcmp(valorAtributo,"a") ||!strcmp(valorAtributo,"A") ||!strcmp(valorAtributo,"i") ||!strcmp(valorAtributo,"I") ||!strcmp(valorAtributo,"disc") ||!strcmp(valorAtributo,"circle") ||!strcmp(valorAtributo,"square"))
 				return 1;
 			else{
-				printErrorSemantico(elemento, atributo, valorAtributo);
+				printErrorSemantico(elemento, atributo, valorAtributo, filaAtri, columnaAtri, filaValor, columnaValor);
 				return -1;
 			}
 		} 
 		else if(!strcmp(atributo,"value")){
 			if(!isExpReg(numero,valorAtributo) && !isExpReg(fecha, valorAtributo)){
-				printErrorSemantico(elemento, atributo, valorAtributo);
+				printErrorSemantico(elemento, atributo, valorAtributo, filaAtri, columnaAtri, filaValor, columnaValor);
 				return -1;
 			}
 			else{
@@ -774,7 +790,7 @@ int atributoValido(char* elemento, char* atributo, char* valorAtributo){
 		if(!strcmp(atributo,"charset"))
 		{
 			if(!isExpReg(codificacion,valorAtributo)){
-				printErrorSemantico(elemento, atributo, valorAtributo);
+				printErrorSemantico(elemento, atributo, valorAtributo, filaAtri, columnaAtri, filaValor, columnaValor);
 				return -1;
 			}
 			else{
@@ -783,7 +799,7 @@ int atributoValido(char* elemento, char* atributo, char* valorAtributo){
 		}
 		else if(!strcmp(atributo,"href")){
 			if(!isExpReg(url,valorAtributo)){
-				printErrorSemantico(elemento, atributo, valorAtributo);
+				printErrorSemantico(elemento, atributo, valorAtributo, filaAtri, columnaAtri, filaValor, columnaValor);
 				return -1;
 			}
 			else{
@@ -792,7 +808,7 @@ int atributoValido(char* elemento, char* atributo, char* valorAtributo){
 		}
 		else if(!strcmp(atributo,"hreflang")){
 			if(!isExpReg(languageCode,valorAtributo)){
-				printErrorSemantico(elemento, atributo, valorAtributo);
+				printErrorSemantico(elemento, atributo, valorAtributo, filaAtri, columnaAtri, filaValor, columnaValor);
 				return -1;
 			}
 			else{
@@ -801,7 +817,7 @@ int atributoValido(char* elemento, char* atributo, char* valorAtributo){
 		}
 		else if(!strcmp(atributo,"media")){
 			if(!isExpReg(texto,valorAtributo)){
-				printErrorSemantico(elemento, atributo, valorAtributo);
+				printErrorSemantico(elemento, atributo, valorAtributo, filaAtri, columnaAtri, filaValor, columnaValor);
 				return -1;
 			}
 			else{
@@ -812,7 +828,7 @@ int atributoValido(char* elemento, char* atributo, char* valorAtributo){
 			if(!strcmp(valorAtributo,"alternate") || !strcmp(valorAtributo,"achieves") || !strcmp(valorAtributo,"author") || !strcmp(valorAtributo,"bookmark") ||  !strcmp(valorAtributo,"external") || !strcmp(valorAtributo,"first") ||!strcmp(valorAtributo,"help") || !strcmp(valorAtributo,"icon") || !strcmp(valorAtributo,"last") ||!strcmp(valorAtributo,"license") || !strcmp(valorAtributo,"next") || !strcmp(valorAtributo,"nofollow") || !strcmp(valorAtributo,"noreferrer") || !strcmp(valorAtributo,"pingback") || !strcmp(valorAtributo,"prefetch") || !strcmp(valorAtributo,"prev") || !strcmp(valorAtributo,"search") || !strcmp(valorAtributo,"sidebar") || !strcmp(valorAtributo,"styleheet") || !strcmp(valorAtributo,"tag") || !strcmp(valorAtributo,"up"))
 				return 1;
 			else{
-				printErrorSemantico(elemento, atributo, valorAtributo);
+				printErrorSemantico(elemento, atributo, valorAtributo, filaAtri, columnaAtri, filaValor, columnaValor);
 				return -1;
 			}
 		}
@@ -820,13 +836,13 @@ int atributoValido(char* elemento, char* atributo, char* valorAtributo){
 			if(!strcmp(valorAtributo,"alternate") || !strcmp(valorAtributo,"bookmark")  ||!strcmp(valorAtributo,"help") || !strcmp(valorAtributo,"start") || !strcmp(valorAtributo,"next") ||  !strcmp(valorAtributo,"contents") || !strcmp(valorAtributo,"index") || !strcmp(valorAtributo,"glossary") || !strcmp(valorAtributo,"copyrigth") || !strcmp(valorAtributo,"chapter") || !strcmp(valorAtributo,"prev") || !strcmp(valorAtributo,"section") || !strcmp(valorAtributo,"subsection") || !strcmp(valorAtributo,"styleheet") || !strcmp(valorAtributo,"appendix"))
 				return 1;
 			else{
-				printErrorSemantico(elemento, atributo, valorAtributo);
+				printErrorSemantico(elemento, atributo, valorAtributo, filaAtri, columnaAtri, filaValor, columnaValor);
 				return -1;
 			}
 		}
 		else if(!strcmp(atributo,"sizes")){
 			if(!isExpReg(sizes,valorAtributo)){
-				printErrorSemantico(elemento, atributo, valorAtributo);
+				printErrorSemantico(elemento, atributo, valorAtributo, filaAtri, columnaAtri, filaValor, columnaValor);
 				return -1;
 			}
 			else{
@@ -837,7 +853,7 @@ int atributoValido(char* elemento, char* atributo, char* valorAtributo){
 			if( !strcmp(valorAtributo,"_blank") || !strcmp(valorAtributo,"_self") || !strcmp(valorAtributo,"_parent") || !strcmp(valorAtributo,"_top"))
 				return 1;
 			else{
-				printErrorSemantico(elemento, atributo, valorAtributo);
+				printErrorSemantico(elemento, atributo, valorAtributo, filaAtri, columnaAtri, filaValor, columnaValor);
 				return -1;
 			}
 		}
@@ -856,7 +872,7 @@ int atributoValido(char* elemento, char* atributo, char* valorAtributo){
 	else if(!strcmp(elemento,"meta")){
 		if(!strcmp(atributo,"charset")){
 			if(!isExpReg(codificacion,valorAtributo)){
-				printErrorSemantico(elemento, atributo, valorAtributo);
+				printErrorSemantico(elemento, atributo, valorAtributo, filaAtri, columnaAtri, filaValor, columnaValor);
 				return -1;
 			}
 			else{
@@ -865,7 +881,7 @@ int atributoValido(char* elemento, char* atributo, char* valorAtributo){
 		}
 		else if(!strcmp(atributo,"content")){
 			if(!isExpReg(textoWithSpace,valorAtributo)){
-				printErrorSemantico(elemento, atributo, valorAtributo);
+				printErrorSemantico(elemento, atributo, valorAtributo, filaAtri, columnaAtri, filaValor, columnaValor);
 				return -1;
 			}
 			else{
@@ -876,13 +892,13 @@ int atributoValido(char* elemento, char* atributo, char* valorAtributo){
 			if( !strcmp(valorAtributo,"content-type") || !strcmp(valorAtributo,"default-style") || !strcmp(valorAtributo,"refresh"))
 				return 1;
 			else{
-				printErrorSemantico(elemento, atributo, valorAtributo);
+				printErrorSemantico(elemento, atributo, valorAtributo, filaAtri, columnaAtri, filaValor, columnaValor);
 				return -1;
 			}
 		}
 		else if(!strcmp(atributo,"name")){
 			if(!isExpReg(texto,valorAtributo)){
-				printErrorSemantico(elemento, atributo, valorAtributo);
+				printErrorSemantico(elemento, atributo, valorAtributo, filaAtri, columnaAtri, filaValor, columnaValor);
 				return -1;
 			}
 			else{
@@ -902,13 +918,13 @@ int atributoValido(char* elemento, char* atributo, char* valorAtributo){
 			if( !strcmp(valorAtributo,"reversed"))
 				return 1;
 			else{
-				printErrorSemantico(elemento, atributo, valorAtributo);
+				printErrorSemantico(elemento, atributo, valorAtributo, filaAtri, columnaAtri, filaValor, columnaValor);
 				return -1;
 			}
 		}
 		else if(!strcmp(atributo,"start")){
 			if(!isExpReg(numero,valorAtributo)){
-				printErrorSemantico(elemento, atributo, valorAtributo);
+				printErrorSemantico(elemento, atributo, valorAtributo, filaAtri, columnaAtri, filaValor, columnaValor);
 				return -1;
 			}
 			else{
@@ -919,7 +935,7 @@ int atributoValido(char* elemento, char* atributo, char* valorAtributo){
 			if( !strcmp(valorAtributo,"1") || !strcmp(valorAtributo,"A") || !strcmp(valorAtributo,"a") || !strcmp(valorAtributo,"I") || !strcmp(valorAtributo,"i"))
 				return 1;
 			else{
-				printErrorSemantico(elemento, atributo, valorAtributo);
+				printErrorSemantico(elemento, atributo, valorAtributo, filaAtri, columnaAtri, filaValor, columnaValor);
 				return -1;
 			}
 		}	
@@ -936,13 +952,13 @@ int atributoValido(char* elemento, char* atributo, char* valorAtributo){
 			if( !strcmp(valorAtributo,"disabled"))
 				return 1;
 			else{
-				printErrorSemantico(elemento, atributo, valorAtributo);
+				printErrorSemantico(elemento, atributo, valorAtributo, filaAtri, columnaAtri, filaValor, columnaValor);
 				return -1;
 			}
 		}
 		else if(!strcmp(atributo,"label")){
 			if(!isExpReg(textoWithSpace,valorAtributo)){
-				printErrorSemantico(elemento, atributo, valorAtributo);
+				printErrorSemantico(elemento, atributo, valorAtributo, filaAtri, columnaAtri, filaValor, columnaValor);
 				return -1;
 			}
 			else{
@@ -953,13 +969,13 @@ int atributoValido(char* elemento, char* atributo, char* valorAtributo){
 			if( !strcmp(valorAtributo,"selected"))
 				return 1;
 			else{
-				printErrorSemantico(elemento, atributo, valorAtributo);
+				printErrorSemantico(elemento, atributo, valorAtributo, filaAtri, columnaAtri, filaValor, columnaValor);
 				return -1;
 			}
 		}
 		else if(!strcmp(atributo,"value")){
 			if(!isExpReg(textoWithSpace,valorAtributo)){
-				printErrorSemantico(elemento, atributo, valorAtributo);
+				printErrorSemantico(elemento, atributo, valorAtributo, filaAtri, columnaAtri, filaValor, columnaValor);
 				return -1;
 			}
 			else{
@@ -975,7 +991,7 @@ int atributoValido(char* elemento, char* atributo, char* valorAtributo){
 	else if(!strcmp(elemento,"script")){
 		if(!strcmp(atributo,"charset")){
 			if(!isExpReg(codificacion,valorAtributo)){
-				printErrorSemantico(elemento, atributo, valorAtributo);
+				printErrorSemantico(elemento, atributo, valorAtributo, filaAtri, columnaAtri, filaValor, columnaValor);
 				return -1;
 			}
 			else{
@@ -986,7 +1002,7 @@ int atributoValido(char* elemento, char* atributo, char* valorAtributo){
 			if( !strcmp(valorAtributo,"async"))
 				return 1;
 			else{
-				printErrorSemantico(elemento, atributo, valorAtributo);
+				printErrorSemantico(elemento, atributo, valorAtributo, filaAtri, columnaAtri, filaValor, columnaValor);
 				return -1;
 			}
 		}
@@ -994,13 +1010,13 @@ int atributoValido(char* elemento, char* atributo, char* valorAtributo){
 			if( !strcmp(valorAtributo,"defer"))
 				return 1;
 			else{
-				printErrorSemantico(elemento, atributo, valorAtributo);
+				printErrorSemantico(elemento, atributo, valorAtributo, filaAtri, columnaAtri, filaValor, columnaValor);
 				return -1;
 			}
 		}
 		else if(!strcmp(atributo,"src")){
 			if(!isExpReg(url,valorAtributo)){
-				printErrorSemantico(elemento, atributo, valorAtributo);
+				printErrorSemantico(elemento, atributo, valorAtributo, filaAtri, columnaAtri, filaValor, columnaValor);
 				return -1;
 			}
 			else{
@@ -1019,7 +1035,7 @@ int atributoValido(char* elemento, char* atributo, char* valorAtributo){
 	else if(!strcmp(elemento,"style")){
 		if(!strcmp(atributo,"media")){
 			if(!isExpReg(texto,valorAtributo)){
-				printErrorSemantico(elemento, atributo, valorAtributo);
+				printErrorSemantico(elemento, atributo, valorAtributo, filaAtri, columnaAtri, filaValor, columnaValor);
 				return -1;
 			}
 			else{
@@ -1030,7 +1046,7 @@ int atributoValido(char* elemento, char* atributo, char* valorAtributo){
 			if( !strcmp(valorAtributo,"scopped"))
 				return 1;
 			else{
-				printErrorSemantico(elemento, atributo, valorAtributo);
+				printErrorSemantico(elemento, atributo, valorAtributo, filaAtri, columnaAtri, filaValor, columnaValor);
 				return -1;
 			}
 		}
@@ -1050,13 +1066,13 @@ int atributoValido(char* elemento, char* atributo, char* valorAtributo){
 			if( !strcmp(valorAtributo,"left") || !strcmp(valorAtributo,"right") || !strcmp(valorAtributo,"top") || !strcmp(valorAtributo,"botton") || !strcmp(valorAtributo,"middle"))
 				return 1;
 			else{
-				printErrorSemantico(elemento, atributo, valorAtributo);
+				printErrorSemantico(elemento, atributo, valorAtributo, filaAtri, columnaAtri, filaValor, columnaValor);
 				return -1;
 			}
 		}
 		else if(!strcmp(atributo,"bgcolor")){
 			if(!isExpReg(bgcolor,valorAtributo)){
-				printErrorSemantico(elemento, atributo, valorAtributo);
+				printErrorSemantico(elemento, atributo, valorAtributo, filaAtri, columnaAtri, filaValor, columnaValor);
 				return -1;
 			}
 			else{
@@ -1067,13 +1083,13 @@ int atributoValido(char* elemento, char* atributo, char* valorAtributo){
 			if( !strcmp(valorAtributo,"1") || !strcmp(valorAtributo,""))
 				return 1;
 			else{
-				printErrorSemantico(elemento, atributo, valorAtributo);
+				printErrorSemantico(elemento, atributo, valorAtributo, filaAtri, columnaAtri, filaValor, columnaValor);
 				return -1;
 			}
 		}
 		else if(!strcmp(atributo,"cellpadding")){
 			if(!isExpReg(numero,valorAtributo)){
-				printErrorSemantico(elemento, atributo, valorAtributo);
+				printErrorSemantico(elemento, atributo, valorAtributo, filaAtri, columnaAtri, filaValor, columnaValor);
 				return -1;
 			}
 			else{
@@ -1082,7 +1098,7 @@ int atributoValido(char* elemento, char* atributo, char* valorAtributo){
 		}
 		else if(!strcmp(atributo,"cellspacing")){
 			if(!isExpReg(numero,valorAtributo)){
-				printErrorSemantico(elemento, atributo, valorAtributo);
+				printErrorSemantico(elemento, atributo, valorAtributo, filaAtri, columnaAtri, filaValor, columnaValor);
 				return -1;
 			}
 			else{
@@ -1093,7 +1109,7 @@ int atributoValido(char* elemento, char* atributo, char* valorAtributo){
 			if( !strcmp(valorAtributo,"void") || !strcmp(valorAtributo,"above") || !strcmp(valorAtributo,"below") || !strcmp(valorAtributo,"hsides") || !strcmp(valorAtributo,"lhs") || !strcmp(valorAtributo,"rhs")  || !strcmp(valorAtributo,"vsides")  || !strcmp(valorAtributo,"box")  || !strcmp(valorAtributo,"border") )
 				return 1;
 			else{
-				printErrorSemantico(elemento, atributo, valorAtributo);
+				printErrorSemantico(elemento, atributo, valorAtributo, filaAtri, columnaAtri, filaValor, columnaValor);
 				return -1;
 			}
 		}
@@ -1101,13 +1117,13 @@ int atributoValido(char* elemento, char* atributo, char* valorAtributo){
 			if( !strcmp(valorAtributo,"none") || !strcmp(valorAtributo,"groups") || !strcmp(valorAtributo,"rows") || !strcmp(valorAtributo,"cols") || !strcmp(valorAtributo,"all"))
 				return 1;
 			else{
-				printErrorSemantico(elemento, atributo, valorAtributo);
+				printErrorSemantico(elemento, atributo, valorAtributo, filaAtri, columnaAtri, filaValor, columnaValor);
 				return -1;
 			}
 		}
 		else if(!strcmp(atributo,"summary")){
 			if(!isExpReg(texto,valorAtributo)){
-				printErrorSemantico(elemento, atributo, valorAtributo);
+				printErrorSemantico(elemento, atributo, valorAtributo, filaAtri, columnaAtri, filaValor, columnaValor);
 				return -1;
 			}
 			else{
@@ -1116,7 +1132,7 @@ int atributoValido(char* elemento, char* atributo, char* valorAtributo){
 		}
 		else if(!strcmp(atributo,"width")){
 			if(!isExpReg(numero,valorAtributo)){
-				printErrorSemantico(elemento, atributo, valorAtributo);
+				printErrorSemantico(elemento, atributo, valorAtributo, filaAtri, columnaAtri, filaValor, columnaValor);
 				return -1;
 			}
 			else{
@@ -1134,7 +1150,7 @@ int atributoValido(char* elemento, char* atributo, char* valorAtributo){
 	else if(!strcmp(elemento,"td")){
 		if(!strcmp(atributo,"colspan")){
 			if(!isExpReg(numero,valorAtributo)){
-				printErrorSemantico(elemento, atributo, valorAtributo);
+				printErrorSemantico(elemento, atributo, valorAtributo, filaAtri, columnaAtri, filaValor, columnaValor);
 				return -1;
 			}
 			else{
@@ -1143,7 +1159,7 @@ int atributoValido(char* elemento, char* atributo, char* valorAtributo){
 		}
 		else if(!strcmp(atributo,"headers")){
 			if(!isExpReg(texto,valorAtributo)){
-				printErrorSemantico(elemento, atributo, valorAtributo);
+				printErrorSemantico(elemento, atributo, valorAtributo, filaAtri, columnaAtri, filaValor, columnaValor);
 				return -1;
 			}
 			else{
@@ -1152,7 +1168,7 @@ int atributoValido(char* elemento, char* atributo, char* valorAtributo){
 		} 
 		else if(!strcmp(atributo,"rowspan")){
 			if(!isExpReg(numero,valorAtributo)){
-				printErrorSemantico(elemento, atributo, valorAtributo);
+				printErrorSemantico(elemento, atributo, valorAtributo, filaAtri, columnaAtri, filaValor, columnaValor);
 				return -1;
 			}
 			else{
@@ -1168,7 +1184,7 @@ int atributoValido(char* elemento, char* atributo, char* valorAtributo){
 	else if(!strcmp(elemento,"th")){
 		if(!strcmp(atributo,"colspan")){
 			if(!isExpReg(numero,valorAtributo)){
-				printErrorSemantico(elemento, atributo, valorAtributo);
+				printErrorSemantico(elemento, atributo, valorAtributo, filaAtri, columnaAtri, filaValor, columnaValor);
 				return -1;
 			}
 			else{
@@ -1177,7 +1193,7 @@ int atributoValido(char* elemento, char* atributo, char* valorAtributo){
 		} 
 		else if(!strcmp(atributo,"headers")){
 			if(!isExpReg(texto,valorAtributo)){
-				printErrorSemantico(elemento, atributo, valorAtributo);
+				printErrorSemantico(elemento, atributo, valorAtributo, filaAtri, columnaAtri, filaValor, columnaValor);
 				return -1;
 			}
 			else{
@@ -1186,7 +1202,7 @@ int atributoValido(char* elemento, char* atributo, char* valorAtributo){
 		} 
 		else if(!strcmp(atributo,"rowspan")){
 			if(!isExpReg(numero,valorAtributo)){
-				printErrorSemantico(elemento, atributo, valorAtributo);
+				printErrorSemantico(elemento, atributo, valorAtributo, filaAtri, columnaAtri, filaValor, columnaValor);
 				return -1;
 			}
 			else{
@@ -1197,7 +1213,7 @@ int atributoValido(char* elemento, char* atributo, char* valorAtributo){
 			if( !strcmp(valorAtributo,"col") || !strcmp(valorAtributo,"colgroup") || !strcmp(valorAtributo,"row") || !strcmp(valorAtributo,"rowgroup"))
 				return 1;
 			else{
-				printErrorSemantico(elemento, atributo, valorAtributo);
+				printErrorSemantico(elemento, atributo, valorAtributo, filaAtri, columnaAtri, filaValor, columnaValor);
 				return -1;
 			}
 		}
@@ -1213,13 +1229,13 @@ int atributoValido(char* elemento, char* atributo, char* valorAtributo){
 				return 1;
 			else
 			{
-				printErrorSemantico(elemento, atributo, valorAtributo);
+				printErrorSemantico(elemento, atributo, valorAtributo, filaAtri, columnaAtri, filaValor, columnaValor);
 				return -1;
 			} 
 		}
 		else if(!strcmp(atributo,"cols")){
 			if(!isExpReg(numero,valorAtributo)){
-				printErrorSemantico(elemento, atributo, valorAtributo);
+				printErrorSemantico(elemento, atributo, valorAtributo, filaAtri, columnaAtri, filaValor, columnaValor);
 				return -1;
 			}
 			else{
@@ -1231,13 +1247,13 @@ int atributoValido(char* elemento, char* atributo, char* valorAtributo){
 				return 1;
 			else
 			{
-				printErrorSemantico(elemento, atributo, valorAtributo);
+				printErrorSemantico(elemento, atributo, valorAtributo, filaAtri, columnaAtri, filaValor, columnaValor);
 				return -1;
 			} 
 		}
 		else if(!strcmp(atributo,"form")){
 			if(!isExpReg(texto,valorAtributo)){
-				printErrorSemantico(elemento, atributo, valorAtributo);
+				printErrorSemantico(elemento, atributo, valorAtributo, filaAtri, columnaAtri, filaValor, columnaValor);
 				return -1;
 			}
 			else{
@@ -1246,7 +1262,7 @@ int atributoValido(char* elemento, char* atributo, char* valorAtributo){
 		}
 		else if(!strcmp(atributo,"maxlength")){
 			if(!isExpReg(numero,valorAtributo)){
-				printErrorSemantico(elemento, atributo, valorAtributo);
+				printErrorSemantico(elemento, atributo, valorAtributo, filaAtri, columnaAtri, filaValor, columnaValor);
 				return -1;
 			}
 			else{
@@ -1255,7 +1271,7 @@ int atributoValido(char* elemento, char* atributo, char* valorAtributo){
 		}
 		else if(!strcmp(atributo,"name")){
 			if(!isExpReg(textoWithSpace,valorAtributo)){
-				printErrorSemantico(elemento, atributo, valorAtributo);
+				printErrorSemantico(elemento, atributo, valorAtributo, filaAtri, columnaAtri, filaValor, columnaValor);
 				return -1;
 			}
 			else{
@@ -1264,7 +1280,7 @@ int atributoValido(char* elemento, char* atributo, char* valorAtributo){
 		}
 		else if(!strcmp(atributo,"placeholder")){
 			if(!isExpReg(textoWithSpace,valorAtributo)){
-				printErrorSemantico(elemento, atributo, valorAtributo);
+				printErrorSemantico(elemento, atributo, valorAtributo, filaAtri, columnaAtri, filaValor, columnaValor);
 				return -1;
 			}
 			else{
@@ -1276,7 +1292,7 @@ int atributoValido(char* elemento, char* atributo, char* valorAtributo){
 				return 1;
 			else
 			{
-				printErrorSemantico(elemento, atributo, valorAtributo);
+				printErrorSemantico(elemento, atributo, valorAtributo, filaAtri, columnaAtri, filaValor, columnaValor);
 				return -1;
 			} 
 		}
@@ -1285,13 +1301,13 @@ int atributoValido(char* elemento, char* atributo, char* valorAtributo){
 				return 1;
 			else
 			{
-				printErrorSemantico(elemento, atributo, valorAtributo);
+				printErrorSemantico(elemento, atributo, valorAtributo, filaAtri, columnaAtri, filaValor, columnaValor);
 				return -1;
 			} 
 		}
 		else if(!strcmp(atributo,"rows")){
 			if(!isExpReg(numero,valorAtributo)){
-				printErrorSemantico(elemento, atributo, valorAtributo);
+				printErrorSemantico(elemento, atributo, valorAtributo, filaAtri, columnaAtri, filaValor, columnaValor);
 				return -1;
 			}
 			else{
@@ -1303,7 +1319,7 @@ int atributoValido(char* elemento, char* atributo, char* valorAtributo){
 				return 1;
 			else
 			{
-				printErrorSemantico(elemento, atributo, valorAtributo);
+				printErrorSemantico(elemento, atributo, valorAtributo, filaAtri, columnaAtri, filaValor, columnaValor);
 				return -1;
 			} 
 		}
@@ -1312,7 +1328,7 @@ int atributoValido(char* elemento, char* atributo, char* valorAtributo){
 	}
 }
 
-int globalatributes(char* elemento, char* atributo, char* valorAtributo){
+int globalatributes(char* elemento, char* atributo, char* valorAtributo, int filaAtri, int columnaAtri, int filaValor, int columnaValor){
 
 	/*************************************************************************************************
 	**************************************Verificación de atributos globales*************************
@@ -1320,7 +1336,7 @@ int globalatributes(char* elemento, char* atributo, char* valorAtributo){
 
 	if(!strcmp(atributo,"accesskey")){
 		if(!isExpReg(caracter,valorAtributo)){
-			printErrorSemantico(elemento, atributo, valorAtributo);
+			printErrorSemantico(elemento, atributo, valorAtributo, filaAtri, columnaAtri, filaValor, columnaValor);
 			return -1;
 		}
 		else
@@ -1328,7 +1344,7 @@ int globalatributes(char* elemento, char* atributo, char* valorAtributo){
 	}
 	else if(!strcmp(atributo,"class")){
 		if(!isExpReg(texto,valorAtributo)){
-			printErrorSemantico(elemento, atributo, valorAtributo);
+			printErrorSemantico(elemento, atributo, valorAtributo, filaAtri, columnaAtri, filaValor, columnaValor);
 			return -1;
 		}
 		else
@@ -1339,13 +1355,13 @@ int globalatributes(char* elemento, char* atributo, char* valorAtributo){
 			return 1;
 		else
 		{
-			printErrorSemantico(elemento, atributo, valorAtributo);
+			printErrorSemantico(elemento, atributo, valorAtributo, filaAtri, columnaAtri, filaValor, columnaValor);
 			return -1;
 		}
 	} 
 	else if(!strcmp(atributo,"contextmenu")){
 		if(!isExpReg(texto,valorAtributo)){
-			printErrorSemantico(elemento, atributo, valorAtributo);
+			printErrorSemantico(elemento, atributo, valorAtributo, filaAtri, columnaAtri, filaValor, columnaValor);
 			return -1;
 		} 
 		else
@@ -1356,7 +1372,7 @@ int globalatributes(char* elemento, char* atributo, char* valorAtributo){
 			return 1;
 		else
 		{
-			printErrorSemantico(elemento, atributo, valorAtributo);
+			printErrorSemantico(elemento, atributo, valorAtributo, filaAtri, columnaAtri, filaValor, columnaValor);
 			return -1;
 		}
 	} else if(!strcmp(atributo,"draggable")){
@@ -1364,7 +1380,7 @@ int globalatributes(char* elemento, char* atributo, char* valorAtributo){
 			return 1;
 		else
 		{
-			printErrorSemantico(elemento, atributo, valorAtributo);
+			printErrorSemantico(elemento, atributo, valorAtributo, filaAtri, columnaAtri, filaValor, columnaValor);
 			return -1;
 		}
 	}
@@ -1373,7 +1389,7 @@ int globalatributes(char* elemento, char* atributo, char* valorAtributo){
 			return 1;
 		else
 		{
-			printErrorSemantico(elemento, atributo, valorAtributo);
+			printErrorSemantico(elemento, atributo, valorAtributo, filaAtri, columnaAtri, filaValor, columnaValor);
 			return -1;
 		}
 	} 
@@ -1382,12 +1398,12 @@ int globalatributes(char* elemento, char* atributo, char* valorAtributo){
 			return 1;
 		else
 		{
-			printErrorSemantico(elemento, atributo, valorAtributo);
+			printErrorSemantico(elemento, atributo, valorAtributo, filaAtri, columnaAtri, filaValor, columnaValor);
 			return -1;
 		}
 	}else if(!strcmp(atributo,"id")){
 		if(!isExpReg(texto,valorAtributo)){
-			printErrorSemantico(elemento, atributo, valorAtributo);
+			printErrorSemantico(elemento, atributo, valorAtributo, filaAtri, columnaAtri, filaValor, columnaValor);
 			return -1;
 		}
 		else
@@ -1395,7 +1411,7 @@ int globalatributes(char* elemento, char* atributo, char* valorAtributo){
 
 	} else if(!strcmp(atributo,"lang")){
 		if(!isExpReg(languageCode,valorAtributo)){
-			printErrorSemantico(elemento, atributo, valorAtributo);
+			printErrorSemantico(elemento, atributo, valorAtributo, filaAtri, columnaAtri, filaValor, columnaValor);
 			return -1;
 		}
 		else
@@ -1405,14 +1421,14 @@ int globalatributes(char* elemento, char* atributo, char* valorAtributo){
 			return 1;
 		else
 		{
-			printErrorSemantico(elemento, atributo, valorAtributo);
+			printErrorSemantico(elemento, atributo, valorAtributo, filaAtri, columnaAtri, filaValor, columnaValor);
 			return -1;
 		}
 	}
 	//Style no  porque necesita css
 	else if(!strcmp(atributo,"tabindex")) {
 		if(!isExpReg(numero,valorAtributo)){
-			printf("Error semantico: tabindex formato incorrecto\n");
+			printErrorSemantico(elemento, atributo, valorAtributo, filaAtri, columnaAtri, filaValor, columnaValor);
 			return -1;
 		}
 		else
@@ -1420,7 +1436,7 @@ int globalatributes(char* elemento, char* atributo, char* valorAtributo){
 
 	}else if(!strcmp(atributo,"title")){
 		if(!isExpReg(textoWithSpace,valorAtributo)){
-			printf("Error semantico: tabindex formato incorrecto\n");
+			printErrorSemantico(elemento, atributo, valorAtributo, filaAtri, columnaAtri, filaValor, columnaValor);
 			return -1;
 		}
 		else
@@ -1430,16 +1446,16 @@ int globalatributes(char* elemento, char* atributo, char* valorAtributo){
 			return 1;
 		else
 		{
-			printf("Error semantico: translate formato incorrecto\n");
+			printErrorSemantico(elemento, atributo, valorAtributo, filaAtri, columnaAtri, filaValor, columnaValor);
 			return -1;
 		}
 	}
 	else{
-		eventAtributtes(elemento,atributo,valorAtributo);
+		return eventAtributtes(elemento,atributo,valorAtributo, filaAtri, columnaAtri, filaValor, columnaValor);
 	}
 }
 //Función que valida los atributos de eventos, como estos usan script su contenido no se verificará
-int eventAtributtes(char* elemento, char* atributo, char* valorAtributo){
+int eventAtributtes(char* elemento, char* atributo, char* valorAtributo,int filaAtri, int columnaAtri, int filaValor, int columnaValor){
 
 	/*************************************************************************************************
 	**************************************Verificación de atributos de eventos************************
@@ -1449,7 +1465,8 @@ int eventAtributtes(char* elemento, char* atributo, char* valorAtributo){
 	{
 		return 1;
 	}
-	else
-		printErrorSemanticoAtributoInvalido(elemento, atributo, valorAtributo);
+	else{
+		printErrorSemanticoAtributoInvalido(elemento, atributo, valorAtributo, filaAtri, columnaAtri, filaValor, columnaValor);
 		return -2;
+	}
 }
