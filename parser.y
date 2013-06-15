@@ -5,7 +5,6 @@
 #include <regex.h>
 #include "arbol.h"
 #include "semantico.h"
-#include "CrearArbol.h"
 #define BLUE "\e[34m" 
 #define RED "\e[31m"
 #define GREEN "\e[32m"
