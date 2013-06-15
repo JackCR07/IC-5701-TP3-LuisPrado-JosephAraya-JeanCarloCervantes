@@ -1,3 +1,18 @@
+/*******************************************************************************************
+ * Tecnologico de Costa Rica                                                               *
+ * Ingieneria en Computación                                                               *
+ * Compiladores e Interpretes                                                              *
+ * Analizador Semantico xhtml                                                              *
+ * Tarea Programada 3                                                                      *
+ * parser.y                                                                                *
+ * Archivo que implementa un parser para xhtml                                             *
+ *                                                                                         *
+ * Estudiantes: Joseph Araya Rojas                                                         *
+ *				Luis Prado Rodríguez                                                       *
+ *				Jean Carlo Cervantes                                                       *
+ *                                                                                         *
+ * Profesor: Andrei Fuentes                                                                *
+ * *****************************************************************************************/
 %{
 #include <stdio.h>
 #include <stdlib.h>
@@ -23,6 +38,11 @@ char* etiquetaLeida;//Ultima etiqueta html leida;
 char* nombreAtributoLeido;
 char* valorAtributoLeido;
 int docTypeCreado=0;
+int filaAtributo=0;
+int filaValor=0;
+int columnaAtributo=0;
+int columnaValor=0;
+int errorSemantico=0;//Bandera que indica si ocurrio un error semantico, si ocurriera no se imprime el arbol sintactico
 
 
 
@@ -59,7 +79,9 @@ void yyerror(const char* s);
 xhtml : doctype html_tag
 {
 	analizarSemantico(arbol->raizHtml);
-	preImprimirArbol(arbol);
+	if(!errorSemantico){
+		preImprimirArbol(arbol);
+	}
 }
 ;
 doctype : '<''!'dctype html pblid values values'>'
@@ -920,66 +942,67 @@ atributos : atributo atributos
 |
 ;
 atributo : atributte'='values { //Agregado a la gramatica
-	Atributo_t* nuevoAtributo = crearAtributo(nombreAtributoLeido, valorAtributoLeido);
+
+	Atributo_t* nuevoAtributo = crearAtributo(nombreAtributoLeido, valorAtributoLeido, filaAtributo, columnaAtributo, filaValor, columnaValor);
 	agregarAtributo(listaAtributosActual,nuevoAtributo);
 }
 	
 ;
 text :T_Text{
-	Texto_t* nuevoTexto = crearTexto(yylval.str);
+	Texto_t* nuevoTexto = crearTexto(yylval.str, yylloc.first_line, yylloc.first_column);
 	agregarTexto(listaTextosActual,nuevoTexto);
 }
 | T_Atributtes {
-	Texto_t* nuevoTexto = crearTexto(yylval.str);
+	Texto_t* nuevoTexto = crearTexto(yylval.str, yylloc.first_line, yylloc.first_column);
 	agregarTexto(listaTextosActual,nuevoTexto);
 }
-| T_dl {agregarTexto(listaTextosActual,crearTexto("dl"));}
-| T_html {agregarTexto(listaTextosActual,crearTexto("html"));}
-| T_script {agregarTexto(listaTextosActual,crearTexto("script"));}
-| T_dt {agregarTexto(listaTextosActual,crearTexto("dt"));}
-| T_img {agregarTexto(listaTextosActual,crearTexto("img"));}
-| T_span {agregarTexto(listaTextosActual,crearTexto("span"));}
-| T_a {agregarTexto(listaTextosActual,crearTexto("a"));}
-| T_dd {agregarTexto(listaTextosActual,crearTexto("dd"));}
-| T_input {agregarTexto(listaTextosActual,crearTexto("input"));} 
-| T_strong {agregarTexto(listaTextosActual,crearTexto("strong"));} 
-| T_b {agregarTexto(listaTextosActual,crearTexto("b"));}
-| T_em {agregarTexto(listaTextosActual,crearTexto("em"));} 
-| T_li {agregarTexto(listaTextosActual,crearTexto("li"));}
-| T_style {agregarTexto(listaTextosActual,crearTexto("style"));}
-| T_blockquote {agregarTexto(listaTextosActual,crearTexto("blockquote"));}
-| T_embed {agregarTexto(listaTextosActual,crearTexto("embed"));}
-| T_link {agregarTexto(listaTextosActual,crearTexto("link"));}
-| T_table {agregarTexto(listaTextosActual,crearTexto("table"));}
-| T_body {agregarTexto(listaTextosActual,crearTexto("body"));}
-| T_footer {agregarTexto(listaTextosActual,crearTexto("footer"));}
-| T_meta {agregarTexto(listaTextosActual,crearTexto("meta"));}
-| T_td {agregarTexto(listaTextosActual,crearTexto("td"));}
-| T_br {agregarTexto(listaTextosActual,crearTexto("br"));}
-| T_form {agregarTexto(listaTextosActual,crearTexto("form"));}
-| T_object {agregarTexto(listaTextosActual,crearTexto("object"));}
-| T_th {agregarTexto(listaTextosActual,crearTexto("th"));}
-| T_button {agregarTexto(listaTextosActual,crearTexto("button"));}
-| T_h1 {agregarTexto(listaTextosActual,crearTexto("h1"));}
-| T_h2 {agregarTexto(listaTextosActual,crearTexto("h2"));}
-| T_h3 {agregarTexto(listaTextosActual,crearTexto("h3"));}
-| T_h4 {agregarTexto(listaTextosActual,crearTexto("h4"));}
-| T_h5 {agregarTexto(listaTextosActual,crearTexto("h5"));}
-| T_h6 {agregarTexto(listaTextosActual,crearTexto("h6"));}
-| T_ol {agregarTexto(listaTextosActual,crearTexto("ol"));}
-| T_tr {agregarTexto(listaTextosActual,crearTexto("tr"));}
-| T_caption {agregarTexto(listaTextosActual,crearTexto("caption"));}
-| T_head {agregarTexto(listaTextosActual,crearTexto("head"));}
-| T_option {agregarTexto(listaTextosActual,crearTexto("option"));}
-| T_textarea {agregarTexto(listaTextosActual,crearTexto("textarea"));}
-| T_code {agregarTexto(listaTextosActual,crearTexto("code"));}
-| T_header {agregarTexto(listaTextosActual,crearTexto("header"));}
-| T_p {agregarTexto(listaTextosActual,crearTexto("p"));}
-| T_title {agregarTexto(listaTextosActual,crearTexto("title"));} 
-| T_div {agregarTexto(listaTextosActual,crearTexto("div"));}
-| T_hr {agregarTexto(listaTextosActual,crearTexto("hr"));}
-| T_pre {agregarTexto(listaTextosActual,crearTexto("pre"));}
-| T_ul {agregarTexto(listaTextosActual,crearTexto("ul"));}
+| T_dl {agregarTexto(listaTextosActual,crearTexto("dl", yylloc.first_line, yylloc.first_column));}
+| T_html {agregarTexto(listaTextosActual,crearTexto("html", yylloc.first_line, yylloc.first_column));}
+| T_script {agregarTexto(listaTextosActual,crearTexto("script", yylloc.first_line, yylloc.first_column));}
+| T_dt {agregarTexto(listaTextosActual,crearTexto("dt", yylloc.first_line, yylloc.first_column));}
+| T_img {agregarTexto(listaTextosActual,crearTexto("img", yylloc.first_line, yylloc.first_column));}
+| T_span {agregarTexto(listaTextosActual,crearTexto("span", yylloc.first_line, yylloc.first_column));}
+| T_a {agregarTexto(listaTextosActual,crearTexto("a", yylloc.first_line, yylloc.first_column));}
+| T_dd {agregarTexto(listaTextosActual,crearTexto("dd", yylloc.first_line, yylloc.first_column));}
+| T_input {agregarTexto(listaTextosActual,crearTexto("input", yylloc.first_line, yylloc.first_column));} 
+| T_strong {agregarTexto(listaTextosActual,crearTexto("strong", yylloc.first_line, yylloc.first_column));} 
+| T_b {agregarTexto(listaTextosActual,crearTexto("b", yylloc.first_line, yylloc.first_column));}
+| T_em {agregarTexto(listaTextosActual,crearTexto("em", yylloc.first_line, yylloc.first_column));} 
+| T_li {agregarTexto(listaTextosActual,crearTexto("li", yylloc.first_line, yylloc.first_column));}
+| T_style {agregarTexto(listaTextosActual,crearTexto("style", yylloc.first_line, yylloc.first_column));}
+| T_blockquote {agregarTexto(listaTextosActual,crearTexto("blockquote", yylloc.first_line, yylloc.first_column));}
+| T_embed {agregarTexto(listaTextosActual,crearTexto("embed", yylloc.first_line, yylloc.first_column));}
+| T_link {agregarTexto(listaTextosActual,crearTexto("link", yylloc.first_line, yylloc.first_column));}
+| T_table {agregarTexto(listaTextosActual,crearTexto("table", yylloc.first_line, yylloc.first_column));}
+| T_body {agregarTexto(listaTextosActual,crearTexto("body", yylloc.first_line, yylloc.first_column));}
+| T_footer {agregarTexto(listaTextosActual,crearTexto("footer", yylloc.first_line, yylloc.first_column));}
+| T_meta {agregarTexto(listaTextosActual,crearTexto("meta", yylloc.first_line, yylloc.first_column));}
+| T_td {agregarTexto(listaTextosActual,crearTexto("td", yylloc.first_line, yylloc.first_column));}
+| T_br {agregarTexto(listaTextosActual,crearTexto("br", yylloc.first_line, yylloc.first_column));}
+| T_form {agregarTexto(listaTextosActual,crearTexto("form", yylloc.first_line, yylloc.first_column));}
+| T_object {agregarTexto(listaTextosActual,crearTexto("object", yylloc.first_line, yylloc.first_column));}
+| T_th {agregarTexto(listaTextosActual,crearTexto("th", yylloc.first_line, yylloc.first_column));}
+| T_button {agregarTexto(listaTextosActual,crearTexto("button", yylloc.first_line, yylloc.first_column));}
+| T_h1 {agregarTexto(listaTextosActual,crearTexto("h1", yylloc.first_line, yylloc.first_column));}
+| T_h2 {agregarTexto(listaTextosActual,crearTexto("h2", yylloc.first_line, yylloc.first_column));}
+| T_h3 {agregarTexto(listaTextosActual,crearTexto("h3", yylloc.first_line, yylloc.first_column));}
+| T_h4 {agregarTexto(listaTextosActual,crearTexto("h4", yylloc.first_line, yylloc.first_column));}
+| T_h5 {agregarTexto(listaTextosActual,crearTexto("h5", yylloc.first_line, yylloc.first_column));}
+| T_h6 {agregarTexto(listaTextosActual,crearTexto("h6", yylloc.first_line, yylloc.first_column));}
+| T_ol {agregarTexto(listaTextosActual,crearTexto("ol", yylloc.first_line, yylloc.first_column));}
+| T_tr {agregarTexto(listaTextosActual,crearTexto("tr", yylloc.first_line, yylloc.first_column));}
+| T_caption {agregarTexto(listaTextosActual,crearTexto("caption", yylloc.first_line, yylloc.first_column));}
+| T_head {agregarTexto(listaTextosActual,crearTexto("head", yylloc.first_line, yylloc.first_column));}
+| T_option {agregarTexto(listaTextosActual,crearTexto("option", yylloc.first_line, yylloc.first_column));}
+| T_textarea {agregarTexto(listaTextosActual,crearTexto("textarea", yylloc.first_line, yylloc.first_column));}
+| T_code {agregarTexto(listaTextosActual,crearTexto("code", yylloc.first_line, yylloc.first_column));}
+| T_header {agregarTexto(listaTextosActual,crearTexto("header", yylloc.first_line, yylloc.first_column));}
+| T_p {agregarTexto(listaTextosActual,crearTexto("p", yylloc.first_line, yylloc.first_column));}
+| T_title {agregarTexto(listaTextosActual,crearTexto("title", yylloc.first_line, yylloc.first_column));} 
+| T_div {agregarTexto(listaTextosActual,crearTexto("div", yylloc.first_line, yylloc.first_column));}
+| T_hr {agregarTexto(listaTextosActual,crearTexto("hr", yylloc.first_line, yylloc.first_column));}
+| T_pre {agregarTexto(listaTextosActual,crearTexto("pre", yylloc.first_line, yylloc.first_column));}
+| T_ul {agregarTexto(listaTextosActual,crearTexto("ul", yylloc.first_line, yylloc.first_column));}
 ;
 html : T_html;
 dctype : T_DOCTYPE
@@ -991,7 +1014,7 @@ values : T_Values {
 	 	int lenAtributo = strlen(yylval.str);
 		char *nuevo = (char*)malloc(sizeof(char) * lenAtributo-1);
 		strncpy(nuevo, yylval.str+1, lenAtributo-2);
-		Texto_t* nuevoTexto = crearTexto(nuevo);
+		Texto_t* nuevoTexto = crearTexto(nuevo, yylloc.first_line, yylloc.first_column);
 		agregarTexto(listaTextosDocType,nuevoTexto);
 	 }
 	 else{
@@ -999,12 +1022,18 @@ values : T_Values {
 		char *nuevo = (char*)malloc(sizeof(char) * lenAtributo-1);
 		strncpy(nuevo, yylval.str+1, lenAtributo-2);
 		valorAtributoLeido= nuevo;
+		filaValor= yylloc.first_line;
+		columnaValor= yylloc.first_column;
 	} //Modificacion gramatica
 }
 ;
 head : T_head
 ;
-atributte : T_Atributtes  {nombreAtributoLeido=  yylval.str;}//Modificacion gramatica
+atributte : T_Atributtes  {
+	nombreAtributoLeido=  yylval.str;
+	filaAtributo= yylloc.first_line;
+	columnaAtributo= yylloc.first_column;
+}
 ;
 
 %%
@@ -1022,7 +1051,7 @@ int main() {
 
 void yyerror(const char* s)
 {
- fprintf(stderr,"Error en linea %d, columna %d : %s\n", yylloc.first_line, yylloc.first_column, s);
+ fprintf(stderr,RED"Error Sintactico "BLUE"Linea %d, Columna %d : "WHITE"%s\n", yylloc.first_line, yylloc.first_column, s);
 }
 
 
@@ -1052,7 +1081,14 @@ void analizarSemantico(Nodo_t* raiz){
 			while(atributoTmp!=NULL){
 				char* atributo = atributoTmp->nombreAtributo;
 				char* valorAtributo = atributoTmp->valorAtributo;
-				atributoValido(elemento, atributo,valorAtributo);
+				int filaA= atributoTmp->filaAtributo;
+				int columnaA = atributoTmp->columnaAtributo;
+				int filaV= atributoTmp->filaValor;
+				int columnaV= atributoTmp->columnaValor;
+				int resultAtributo = atributoValido(elemento, atributo,valorAtributo, filaA, columnaA, filaV, columnaV);
+				if((resultAtributo== -1 || resultAtributo==-2) && errorSemantico==0){
+					errorSemantico=1;
+				}
 				atributoTmp= atributoTmp->siguiente;
 			}
 		}
