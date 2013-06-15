@@ -1,5 +1,5 @@
 analyzer: lex.yy.o y.tab.o semantico.o arbol.o
-	gcc -o xhtml lex.yy.o y.tab.o semantico.o arbol.o -ly -ll -I.
+	gcc -o analyzer  lex.yy.o y.tab.o semantico.o arbol.o -ly -ll -I.
 lex.yy.c: xhtmlscanner.l y.tab.c
 	flex xhtmlscanner.l
 y.tab.c: parser.y
