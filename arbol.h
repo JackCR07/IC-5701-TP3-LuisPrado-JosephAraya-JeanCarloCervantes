@@ -1,15 +1,27 @@
-/**************************************************
- *  
- * Arbol.h  
- * Header que contiene la declaración de
- * variables y funciones necesitadas para el parse tre
- * 
- * 
- * *****************************************/
+/*******************************************************************************************
+ * Tecnologico de Costa Rica                                                               *
+ * Ingieneria en Computación                                                               *
+ * Compiladores e Interpretes                                                              *
+ * Analizador Semantico xhtml                                                              *
+ * Tarea Programada 3                                                                      *
+ * Arbol.h                                                                                 *
+ * Header que contiene la declaración de                                                   *
+ * variables y funciones necesitadas para formar el parse tree                             *
+ *                                                                                         *
+ * Estudiantes: Joseph Araya Rojas                                                         *
+ *				Luis Prado Rodríguez                                                       *
+ *				Jean Carlo Cervantes                                                       *
+ *                                                                                         *
+ * Profesor: Andrei Fuentes                                                                *
+ * *****************************************************************************************/
 typedef struct Atributo{//Representa atributos de elementos html 
-  char* nombreAtributo;
+  	char* nombreAtributo;
 	char* valorAtributo;
 	struct Atributo* siguiente;
+	int filaAtributo;
+	int columnaAtributo;
+	int filaValor;
+	int columnaValor;
 }Atributo_t;
 
 typedef struct ListaAtributos{//Representa la lista de atributos que puede tener un elemento html
@@ -19,6 +31,8 @@ typedef struct ListaAtributos{//Representa la lista de atributos que puede tener
 typedef struct Texto{
 	char* texto;
 	struct Texto* siguiente;
+	int fila;
+	int columna;
 }Texto_t;
 
 
@@ -64,11 +78,11 @@ Arbol_t* arbol;
 
 Nodo_t* crearNodo(char* nombreNodo, Nodo_t* padre);
 void agregarHijo(Nodo_t* padre, Nodo_t* hijo);
-Atributo_t* crearAtributo(char* nombreAtributo, char* valorAtributo);
+Atributo_t* crearAtributo(char* nombreAtributo, char* valorAtributo, int filaAtributo, int columnaAtributo, int filaValor, int columnaValor);
 ListaAtributos_t* crearListaAtributos();
 void agregarListaAtributos(Nodo_t* nodo, ListaAtributos_t* listaAtributos);
 void agregarAtributo(ListaAtributos_t* listaAtributos, Atributo_t* atributo);
-Texto_t* crearTexto(char* valorTexto);
+Texto_t* crearTexto(char* valorTexto, int fila, int columna);
 void agregarTexto(ListaTextos_t* listaTextos, Texto_t* texto);
 void agregarListaTextos(Nodo_t* nodo, ListaTextos_t* listaTextos);
 ListaTextos_t* crearListaTextos();
