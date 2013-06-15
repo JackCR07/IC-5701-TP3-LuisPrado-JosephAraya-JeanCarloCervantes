@@ -58,7 +58,6 @@ DocType_t* docTypeDocumento;
 ListaAtributos_t* listaAtributosActual;
 ListaTextos_t * listaTextosActual;
 ListaTextos_t * listaTextosDocType;
-int docTypeCreado=0;
 Arbol_t* arbol;
 
 //Declaración de funciones
