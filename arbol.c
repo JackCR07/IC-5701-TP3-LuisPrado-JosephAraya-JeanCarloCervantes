@@ -1,3 +1,19 @@
+/*******************************************************************************************
+ * Tecnologico de Costa Rica                                                               *
+ * Ingieneria en Computación                                                               *
+ * Compiladores e Interpretes                                                              *
+ * Analizador Semantico xhtml                                                              *
+ * Tarea Programada 3                                                                      *
+ * Arbol.c                                                                                 *
+ * Archivo C que contiene la inplementación de las funciones                               *
+ * necesitadas para formar el parse tree                                                   *
+ *                                                                                         *
+ * Estudiantes: Joseph Araya Rojas                                                         *
+ *				Luis Prado Rodríguez                                                       *
+ *				Jean Carlo Cervantes                                                       *
+ *                                                                                         *
+ * Profesor: Andrei Fuentes                                                                *
+ * *****************************************************************************************/
 #include <stdio.h>
 #include <stdlib.h>
 #include "arbol.h"
@@ -40,11 +56,15 @@ Nodo_t* crearNodo(char* nombreNodo,Nodo_t* padre){
 //Recibe un nodo_t padre y un nodo_t hijo
 
 
-Atributo_t* crearAtributo(char* nombreAtributo, char* valorAtributo){
+Atributo_t* crearAtributo(char* nombreAtributo, char* valorAtributo, int filaAtributo, int columnaAtributo, int filaValor, int columnaValor){
 	Atributo_t* nuevoAtributo = malloc(sizeof(Atributo_t));
 	
 	nuevoAtributo->nombreAtributo=nombreAtributo;
 	nuevoAtributo->valorAtributo=valorAtributo;
+	nuevoAtributo->filaAtributo=filaAtributo;
+	nuevoAtributo->columnaAtributo=columnaAtributo;
+	nuevoAtributo->filaValor=filaValor;
+	nuevoAtributo->columnaValor=columnaValor;
 	nuevoAtributo->siguiente=NULL;//Al no tener hermanos en este momento nodo siguiente se inicia en NULL
 	return nuevoAtributo;
 }
@@ -69,9 +89,10 @@ ListaAtributos_t* crearListaAtributos(){
 	return listaAtributos;
 }
 
-Texto_t* crearTexto(char* valorTexto){
+Texto_t* crearTexto(char* valorTexto, int fila, int columna){
 	Texto_t* nuevoTexto = malloc(sizeof(Texto_t));
-	
+	nuevoTexto->fila= fila;
+	nuevoTexto->columna=columna;
 	nuevoTexto->texto= valorTexto;
 	nuevoTexto->siguiente=NULL;//Al no tener hermanos en este momento nodo siguiente se inicia en NULL
 	return nuevoTexto;
@@ -128,6 +149,7 @@ void imprimirDoctype(DocType_t* doctype){
 	printf("     "BLUE"1." RED" Doctype"GREEN " valor 1="YELLOW "%s "GREEN"valor 2 ="YELLOW " %s\n ",doctype->valor1, doctype->valor2);
 }
 void preImprimirArbol(Arbol_t* arbol){
+	printf("                                        "BLUE"Arbol Sintactico\n\n"WHITE);
 	imprimirDoctype(arbol->doctype);
 	int numero[30];
 	numero[0]= 2;
