@@ -1,9 +1,12 @@
 %{
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
+#include <regex.h>
 #include "arbol.h"
+#include "semantico.h"
 #include "CrearArbol.h"
-#define BLUE "\e[34m"
+#define BLUE "\e[34m" 
 #define RED "\e[31m"
 #define GREEN "\e[32m"
 #define YELLOW "\e[33m"
@@ -19,11 +22,11 @@
 //Metodo que crea nuevos elementos del arbol sintactico
 //Recibe el valor del nodo, y el padre del nodo.
 
+ 
+void analizarSemantico(Nodo_t* raiz);
 
 void yyerror(const char* s);
-void atributovalido(char* atr);
-char* elem;
-char* atrib;
+
 %} 
 
 %union {
@@ -46,8 +49,9 @@ char* atrib;
 
 xhtml : doctype html_tag
 {
+	analizarSemantico(arbol->raizHtml);
 	preImprimirArbol(arbol);
-	}
+}
 ;
 doctype : '<''!'dctype html pblid values values'>'
 {
@@ -64,9 +68,6 @@ html_h : '<'html atributos '>' {
 	ListaAtributos_t* listaTmp =listaAtributosActual;
 	agregarListaAtributos(nodoActual,listaTmp);
 	listaAtributosActual=crearListaAtributos();
-	elem="html";
-	if(nombreAtributoLeido!=NULL)
-	atributovalido(nombreAtributoLeido);
 }//Agregado a la gramatica
 ;
 html_t : '<' '/' html '>' //Agregado a la gramtica 
@@ -79,9 +80,6 @@ head_h2 : '<' head atributos '>' //Agregado a la gramatica
 	ListaAtributos_t* listaTmp =listaAtributosActual;
 	agregarListaAtributos(nodoActual,listaTmp);
 	listaAtributosActual=crearListaAtributos();
-	elem="head";
-	if(nombreAtributoLeido!=NULL)
-	atributovalido(nombreAtributoLeido);
 }//Agregado a la gramatica
 ;
 head_tag :  infoh head_t 
@@ -100,9 +98,6 @@ meta : '<' T_meta atributos '/' '>'
 	agregarListaAtributos(nodoActual,listaTmp);
 	listaAtributosActual=crearListaAtributos();
 	nodoActual= nodoActual->padre;
-	elem="meta";
-	if(nombreAtributoLeido!=NULL)
-	atributovalido(nombreAtributoLeido);
 }//Agregado a la gramatica
 ;
 body : body_h body_tag
@@ -112,9 +107,6 @@ body_h: '<' T_body atributos '>' {
 	ListaAtributos_t* listaTmp =listaAtributosActual;
 	agregarListaAtributos(nodoActual,listaTmp);
 	listaAtributosActual=crearListaAtributos();
-	elem="body";
-	if(nombreAtributoLeido!=NULL)
-	atributovalido(nombreAtributoLeido);
 }//Agregado a la gramatica
 ;
 body_tag :  tags body_tag
@@ -173,9 +165,6 @@ a_h : a_h2 a_tag //Modificacion gramtica
 a_h2 : '<' T_a atributos '>'//Agregado a la gramtica
 {
 	accionCabezaLeida_Arbl("a");
-	elem="a";
-	if(nombreAtributoLeido!=NULL)
-	atributovalido(nombreAtributoLeido);
 }
 ;
 em_h : em_h2 em_tag
@@ -183,9 +172,6 @@ em_h : em_h2 em_tag
 em_h2 : '<' T_em atributos '>'//Agregado a la gramtica
 {
 	accionCabezaLeida_Arbl("em");
-	elem="em";
-	if(nombreAtributoLeido!=NULL)
-	atributovalido(nombreAtributoLeido);
 }
 ;
 dt_h : dt_h2 dt_tag
@@ -193,9 +179,6 @@ dt_h : dt_h2 dt_tag
 dt_h2 : '<' T_dt atributos '>'//Agregado a la gramtica
 {
 	accionCabezaLeida_Arbl("dt");
-	elem="dt";
-	if(nombreAtributoLeido!=NULL)
-	atributovalido(nombreAtributoLeido);
 }
 ;
 img_h : '<' T_img atributos '/''>'{
@@ -204,9 +187,6 @@ img_h : '<' T_img atributos '/''>'{
 	agregarListaAtributos(nodoActual,listaTmp);
 	listaAtributosActual=crearListaAtributos();
 	nodoActual= nodoActual->padre;
-	elem="img";
-	if(nombreAtributoLeido!=NULL)
-	atributovalido(nombreAtributoLeido);
 }//Modificado borre img_tag !!!!!!!!!!!!!!!!!!!!!!!!!PREGUNTAR SI ES IMPORTANTE!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 ;
 span_h : span_h2 span_tag
@@ -214,9 +194,6 @@ span_h : span_h2 span_tag
 span_h2 : '<' T_span atributos '>'//Agregado a la gramtica
 {
 	accionCabezaLeida_Arbl("span");
-	elem="span";
-	if(nombreAtributoLeido!=NULL)
-	atributovalido(nombreAtributoLeido);
 }
 ;
 dl_h : dl_h2 dl_tag
@@ -224,9 +201,6 @@ dl_h : dl_h2 dl_tag
 dl_h2 : '<' T_dl atributos '>'//Agregado a la gramtica
 {
 	accionCabezaLeida_Arbl("dl");
-	elem="dl";
-	if(nombreAtributoLeido!=NULL)
-	atributovalido(nombreAtributoLeido);
 }
 ;
 dd_h : dd_h2 dd_tag
@@ -234,9 +208,6 @@ dd_h : dd_h2 dd_tag
 dd_h2 : '<' T_dd atributos '>'//Agregado a la gramtica
 {
 	accionCabezaLeida_Arbl("dd");
-	elem="dd";
-	if(nombreAtributoLeido!=NULL)
-	atributovalido(nombreAtributoLeido);
 }
 ;
 b_h : b_h2 b_tag
@@ -244,9 +215,6 @@ b_h : b_h2 b_tag
 b_h2 : '<' T_b atributos '>'//Agregado a la gramtica
 {
 	accionCabezaLeida_Arbl("b");
-	elem="b";
-	if(nombreAtributoLeido!=NULL)
-	atributovalido(nombreAtributoLeido);
 }
 ;
 li_h : li_h2 li_tag
@@ -254,9 +222,6 @@ li_h : li_h2 li_tag
 li_h2 : '<' T_li atributos '>'//Agregado a la gramtica
 {
 	accionCabezaLeida_Arbl("li");
-	elem="li";
-	if(nombreAtributoLeido!=NULL)
-	atributovalido(nombreAtributoLeido);
 }
 ;
 strong_h: strong_h2 strong_tag
@@ -264,9 +229,6 @@ strong_h: strong_h2 strong_tag
 strong_h2 : '<' T_strong atributos '>'//Agregado a la gramtica
 {
 	accionCabezaLeida_Arbl("strong");
-	elem="strong";
-	if(nombreAtributoLeido!=NULL)
-	atributovalido(nombreAtributoLeido);
 }
 ;
 style_h : style_h2 style_tag
@@ -274,9 +236,6 @@ style_h : style_h2 style_tag
 style_h2 : '<' T_style atributos '>'//Agregado a la gramtica
 {
 	accionCabezaLeida_Arbl("style");
-	elem="style";
-	if(nombreAtributoLeido!=NULL)
-	atributovalido(nombreAtributoLeido);
 }
 ;
 blockquote_h : blockquote_h2 blockquote_tag
@@ -284,9 +243,6 @@ blockquote_h : blockquote_h2 blockquote_tag
 blockquote_h2 : '<' T_blockquote atributos '>'//Agregado a la gramtica
 {
 	accionCabezaLeida_Arbl("blockquote");
-	elem="blockquote";
-	if(nombreAtributoLeido!=NULL)
-	atributovalido(nombreAtributoLeido);
 }
 ;
 embed_h : embed_h2 embed_tag
@@ -294,9 +250,6 @@ embed_h : embed_h2 embed_tag
 embed_h2 : '<' T_embed atributos '>'//Agregado a la gramtica
 {
 	accionCabezaLeida_Arbl("embed");
-	elem="embed";
-	if(nombreAtributoLeido!=NULL)
-	atributovalido(nombreAtributoLeido);
 }
 ;
 link_h : link_h2 link_tag
@@ -304,9 +257,6 @@ link_h : link_h2 link_tag
 link_h2 : '<' T_link atributos '>'
 {
 	accionCabezaLeida_Arbl("link");
-	elem="link";
-	if(nombreAtributoLeido!=NULL)
-	atributovalido(nombreAtributoLeido);
 }
 ;
 table_h : table_h2 table_tag
@@ -314,9 +264,6 @@ table_h : table_h2 table_tag
 table_h2 : '<' T_table atributos '>'
 {
 	accionCabezaLeida_Arbl("table");
-	elem="table";
-	if(nombreAtributoLeido!=NULL)
-	atributovalido(nombreAtributoLeido);
 }
 ;
 footer_h : footer_h2 footer_tag
@@ -324,9 +271,6 @@ footer_h : footer_h2 footer_tag
 footer_h2 : '<' T_footer atributos '>'
 {
 	accionCabezaLeida_Arbl("footer");
-	elem="footer";
-	if(nombreAtributoLeido!=NULL)
-	atributovalido(nombreAtributoLeido);
 }
 ;
 td_h : td_h2 td_tag
@@ -334,9 +278,6 @@ td_h : td_h2 td_tag
 td_h2 : '<' T_td atributos '>'
 {
 	accionCabezaLeida_Arbl("td");
-	elem="td";
-	if(nombreAtributoLeido!=NULL)
-	atributovalido(nombreAtributoLeido);
 }
 ;
 br_h : br_h2 br_tag
@@ -344,9 +285,6 @@ br_h : br_h2 br_tag
 br_h2 : '<' T_br atributos '>'
 {
 	accionCabezaLeida_Arbl("br");
-	elem="br";
-	if(nombreAtributoLeido!=NULL)
-	atributovalido(nombreAtributoLeido);
 }
 ;
 form_h : form_h2 form_tag
@@ -354,9 +292,6 @@ form_h : form_h2 form_tag
 form_h2 : '<' T_form atributos '>'
 {
 	accionCabezaLeida_Arbl("form");
-	elem="form";
-	if(nombreAtributoLeido!=NULL)
-	atributovalido(nombreAtributoLeido);
 }
 ;
 object_h : object_h2 object_tag//Modificacion gramtica
@@ -364,9 +299,6 @@ object_h : object_h2 object_tag//Modificacion gramtica
 object_h2: '<' T_object atributos '>'
 {
 	accionCabezaLeida_Arbl("object");
- 	elem="object";
-	if(nombreAtributoLeido!=NULL)
-	atributovalido(nombreAtributoLeido);
 }
 ;
 th_h : th_h2 th_tag
@@ -374,9 +306,6 @@ th_h : th_h2 th_tag
 th_h2 : '<' T_th atributos '>'
 {
 	accionCabezaLeida_Arbl("th");
-	elem="th";
-	if(nombreAtributoLeido!=NULL)
-	atributovalido(nombreAtributoLeido);
 }
 ;
 button_h : button_h2 button_tag
@@ -384,9 +313,6 @@ button_h : button_h2 button_tag
 button_h2 : '<' T_button atributos '>'
 {
 	accionCabezaLeida_Arbl("button");
-	elem="button";
-	if(nombreAtributoLeido!=NULL)
-	atributovalido(nombreAtributoLeido);
 }
 ;
 h1_h : h1_h2 h1_tag
@@ -394,9 +320,6 @@ h1_h : h1_h2 h1_tag
 h1_h2 : '<' T_h1 atributos '>'
 {
 	accionCabezaLeida_Arbl("h1");
- 	elem="h1";
-	if(nombreAtributoLeido!=NULL)
-	atributovalido(nombreAtributoLeido);
 }
 ;
 h2_h : h2_h2 h2_tag
@@ -404,9 +327,6 @@ h2_h : h2_h2 h2_tag
 h2_h2 : '<' T_h2 atributos '>'
 {
 	accionCabezaLeida_Arbl("h2");
-	elem="h2";
-	if(nombreAtributoLeido!=NULL)
-	atributovalido(nombreAtributoLeido);
 }
 ;
 h3_h : h3_h2 h3_tag
@@ -414,9 +334,6 @@ h3_h : h3_h2 h3_tag
 h3_h2 : '<' T_h3 atributos '>'
 {
 	accionCabezaLeida_Arbl("h3");
-	elem="h3";
-	if(nombreAtributoLeido!=NULL)
-	atributovalido(nombreAtributoLeido);
 }
 ;
 h4_h : h4_h2 h4_tag
@@ -424,9 +341,6 @@ h4_h : h4_h2 h4_tag
 h4_h2 : '<' T_h4 atributos '>'
 {
 	accionCabezaLeida_Arbl("h4");
-	elem="h4";
-	if(nombreAtributoLeido!=NULL)
-	atributovalido(nombreAtributoLeido);
 }
 ;
 h5_h : h5_h2 h5_tag
@@ -434,9 +348,6 @@ h5_h : h5_h2 h5_tag
 h5_h2 : '<' T_h5 atributos '>'
 {
 	accionCabezaLeida_Arbl("h5");
-	elem="h5";
-	if(nombreAtributoLeido!=NULL)
-	atributovalido(nombreAtributoLeido);
 }
 ;
 h6_h : h6_h2 h6_tag
@@ -444,9 +355,6 @@ h6_h : h6_h2 h6_tag
 h6_h2 : '<' T_h6 atributos '>'
 {
 	accionCabezaLeida_Arbl("h6");
-	elem="h6";
-	if(nombreAtributoLeido!=NULL)
-	atributovalido(nombreAtributoLeido);
 }
 ;
 ol_h : ol_h2 ol_tag
@@ -454,9 +362,6 @@ ol_h : ol_h2 ol_tag
 ol_h2 : '<' T_ol atributos '>'
 {
 	accionCabezaLeida_Arbl("ol");
-	elem="ol";
-	if(nombreAtributoLeido!=NULL)
-	atributovalido(nombreAtributoLeido);
 }
 ;
 tr_h : tr_h2 tr_tag
@@ -464,9 +369,6 @@ tr_h : tr_h2 tr_tag
 tr_h2 : '<' T_tr atributos '>'
 {
 	accionCabezaLeida_Arbl("tr");
-	elem="tr";
-	if(nombreAtributoLeido!=NULL)
-	atributovalido(nombreAtributoLeido);
 }
 ;
 caption_h : caption_h2 caption_tag
@@ -474,9 +376,6 @@ caption_h : caption_h2 caption_tag
 caption_h2 : '<' T_caption atributos '>'
 {
 	accionCabezaLeida_Arbl("caption");
-	elem="caption";
-	if(nombreAtributoLeido!=NULL)
-	atributovalido(nombreAtributoLeido);
 }
 ;
 option_h : option_h2 option_tag
@@ -484,9 +383,6 @@ option_h : option_h2 option_tag
 option_h2: '<' T_option atributos '>'
 {
 	accionCabezaLeida_Arbl("option");
- 	elem="option";
-	if(nombreAtributoLeido!=NULL)
-	atributovalido(nombreAtributoLeido);
 }
 ;
 textarea : textarea_h2 textarea_tag
@@ -494,9 +390,6 @@ textarea : textarea_h2 textarea_tag
 textarea_h2: '<' T_textarea atributos '>'
 {
 	accionCabezaLeida_Arbl("textarea");
-	elem="textarea";
-	if(nombreAtributoLeido!=NULL)
-	atributovalido(nombreAtributoLeido);
 }
 ;
 code_h : code_h2 code_tag
@@ -504,9 +397,6 @@ code_h : code_h2 code_tag
 code_h2: '<' T_code atributos '>'
 {
 	accionCabezaLeida_Arbl("code");
-	elem="code";
-	if(nombreAtributoLeido!=NULL)
-	atributovalido(nombreAtributoLeido);
 }
 ;
 header_h : header_h2 header_tag
@@ -514,9 +404,6 @@ header_h : header_h2 header_tag
 header_h2: '<' T_header atributos '>'
 {
 	accionCabezaLeida_Arbl("header");
-	elem="header";
-	if(nombreAtributoLeido!=NULL)
-	atributovalido(nombreAtributoLeido);
 }
 ;
 p_h : p_h2 p_tag//Modificacion gramtica
@@ -524,9 +411,6 @@ p_h : p_h2 p_tag//Modificacion gramtica
 p_h2: '<' T_p atributos '>' 
 {
 	accionCabezaLeida_Arbl("p");
-	elem="p";
-	if(nombreAtributoLeido!=NULL)
-	atributovalido(nombreAtributoLeido);
 }
 //Agregado a la gramatica
 ;
@@ -536,9 +420,6 @@ title_h2: '<' T_title atributos '>'
 {
 	//Si hay algun texto en la lista pertenecen al padre de title
 	accionCabezaLeida_Arbl("title");
-	elem="title";
-	if(nombreAtributoLeido!=NULL)
-	atributovalido(nombreAtributoLeido);
 }
 ;
 div_h : div_h2 div_tag
@@ -546,9 +427,6 @@ div_h : div_h2 div_tag
 div_h2: '<' T_div atributos '>'
 {
 	accionCabezaLeida_Arbl("div");
-	elem="div";
-	if(nombreAtributoLeido!=NULL)
-	atributovalido(nombreAtributoLeido);
 }
 ;
 hr_h : hr_h2 hr_tag
@@ -556,9 +434,6 @@ hr_h : hr_h2 hr_tag
 hr_h2: '<' T_hr atributos '>'
 {
 	accionCabezaLeida_Arbl("hr");
-	elem="hr";
-	if(nombreAtributoLeido!=NULL)
-	atributovalido(nombreAtributoLeido);
 }
 ;
 pre_h : pre_h2 pre_tag
@@ -566,9 +441,6 @@ pre_h : pre_h2 pre_tag
 pre_h2: '<' T_pre atributos '>'
 {
 	accionCabezaLeida_Arbl("pre");
-	elem="pre";
-	if(nombreAtributoLeido!=NULL)
-	atributovalido(nombreAtributoLeido);
 }
 ;
 ul_h : ul_h2 ul_tag
@@ -576,9 +448,6 @@ ul_h : ul_h2 ul_tag
 ul_h2: '<' T_ul atributos '>'
 {
 	accionCabezaLeida_Arbl("ul");
-	elem="ul";
-	if(nombreAtributoLeido!=NULL)
-	atributovalido(nombreAtributoLeido);
 }
 ;
 input_h : input_h2 input_tag 
@@ -586,9 +455,6 @@ input_h : input_h2 input_tag
 input_h2: '<' T_input atributos '>'
 {
 	accionCabezaLeida_Arbl("input");
-	elem="input";
-	if(nombreAtributoLeido!=NULL)
-	atributovalido(nombreAtributoLeido);
 }
 ;
 a_tag : text a_tag
@@ -1100,7 +966,7 @@ text :T_Text{
 | T_code {agregarTexto(listaTextosActual,crearTexto("code"));}
 | T_header {agregarTexto(listaTextosActual,crearTexto("header"));}
 | T_p {agregarTexto(listaTextosActual,crearTexto("p"));}
-| T_title {agregarTexto(listaTextosActual,crearTexto("title"));}
+| T_title {agregarTexto(listaTextosActual,crearTexto("title"));} 
 | T_div {agregarTexto(listaTextosActual,crearTexto("div"));}
 | T_hr {agregarTexto(listaTextosActual,crearTexto("hr"));}
 | T_pre {agregarTexto(listaTextosActual,crearTexto("pre"));}
@@ -1113,17 +979,23 @@ pblid : T_PublicIdentifier
 ;
 values : T_Values {
 	 if(docTypeCreado==0){
-		Texto_t* nuevoTexto = crearTexto(yylval.str);
+	 	int lenAtributo = strlen(yylval.str);
+		char *nuevo = (char*)malloc(sizeof(char) * lenAtributo-1);
+		strncpy(nuevo, yylval.str+1, lenAtributo-2);
+		Texto_t* nuevoTexto = crearTexto(nuevo);
 		agregarTexto(listaTextosDocType,nuevoTexto);
 	 }
 	 else{
-		valorAtributoLeido= yylval.str;
+	 	int lenAtributo = strlen(yylval.str);
+		char *nuevo = (char*)malloc(sizeof(char) * lenAtributo-1);
+		strncpy(nuevo, yylval.str+1, lenAtributo-2);
+		valorAtributoLeido= nuevo;
 	} //Modificacion gramatica
 }
 ;
 head : T_head
 ;
-atributte : T_Atributtes  {nombreAtributoLeido= yylval.str;}//Modificacion gramatica
+atributte : T_Atributtes  {nombreAtributoLeido=  yylval.str;}//Modificacion gramatica
 ;
 
 %%
@@ -1144,289 +1016,8 @@ void yyerror(const char* s)
  fprintf(stderr,"Error en linea %d, columna %d : %s\n", yylloc.first_line, yylloc.first_column, s);
 }
 
-void globalatributes(char* atr){
-	if(!strcmp(atr,"accesskey") || !strcmp(atr,"class") || !strcmp(atr,"contenteditable") || !strcmp(atr,"contextmenu") || !strcmp(atr,"dir") || !strcmp(atr,"draggable") || !strcmp(atr,"dropzone") || !strcmp(atr,"hidden") || !strcmp(atr,"id") || !strcmp(atr,"lang") || !strcmp(atr,"spellcheck") || !strcmp(atr,"style") || !strcmp(atr,"tabindex") || !strcmp(atr,"title") || !strcmp(atr,"translate")){}
-	else
-	printf("Error semantico: Atributo invalido  %s para elemento %s\n",atr, elem);
-	}
-
-void atributovalido(char* atr){
-	if(elem=="a"){
-	if(!strcmp(atr,"href") || !strcmp(atr,"hreflang") || !strcmp(atr,"media") || !strcmp(atr,"rel") || !strcmp(atr,"target") || !strcmp(atr,"type")){}
-	else
-	printf("Error semantico: Atributo invalido  %s para elemento %s\n",atr, elem);
-	}
-	else if(elem=="b"){
-	globalatributes(atr);	
-	}
-	else if(elem=="blockquote"){
-	if(!strcmp(atr,"cite")){}
-	else
-	printf("Error semantico: Atributo invalido  %s para elemento %s\n",atr, elem);
-	}
-	else if(elem=="br" || elem=="dt" || elem=="dl" || elem=="dd" || elem=="em" || elem=="h1" || elem=="h2" || elem=="h3" || elem=="h4" || elem=="h5" || elem=="h6" || elem=="head" || elem=="hr" || elem=="span" || elem=="strong" || elem=="tr" || elem=="title" || elem=="p" || elem=="ul" || elem=="code" || elem=="div" || elem=="body"){
-	globalatributes(atr);
-	}
-	else if(elem=="button"){
-	if(!strcmp(atr,"autofocus") || !strcmp(atr,"disabled") || !strcmp(atr,"form") || !strcmp(atr,"formaction") || !strcmp(atr,"formenctype") || !strcmp(atr,"formmethod") || !strcmp(atr,"formnovalidate") || !strcmp(atr,"formtarget") || !strcmp(atr,"name") || !strcmp(atr,"type") || !strcmp(atr,"value")){}
-	else
-	printf("Error semantico: Atributo invalido  %s para elemento %s\n",atr, elem);
-	}
-	else if(elem=="caption"){
-	if(!strcmp(atr,"align")){}
-	else
-	globalatributes(atr);
-	}
-	else if(elem=="embed"){
-	if(!strcmp(atr,"height") || !strcmp(atr,"src") || !strcmp(atr,"type") || !strcmp(atr,"width")){}
-	else
-	globalatributes(atr);
-	}
-	else if(elem=="form"){
-	if(!strcmp(atr,"accept") || !strcmp(atr,"accept-charset") || !strcmp(atr,"action") || !strcmp(atr,"autocomplete") || !strcmp(atr,"enctype") || !strcmp(atr,"method") || !strcmp(atr,"name") || !strcmp(atr,"novalidate") || !strcmp(atr,"target")){}
-	else
-	globalatributes(atr);
-	}
-	else if(elem=="html"){
-	if(!strcmp(atr,"manifest")){}
-	else
-	globalatributes(atr);
-	}
-	else if(elem=="img"){
-	if(!strcmp(atr,"align") || !strcmp(atr,"alt") || !strcmp(atr,"border") || !strcmp(atr,"crossorigin") || !strcmp(atr,"height") || !strcmp(atr,"hspace") || !strcmp(atr,"ismap") || !strcmp(atr,"longdesc") || !strcmp(atr,"src") || !strcmp(atr,"usemap") || !strcmp(atr,"vspace") || !strcmp(atr,"width")){}
-	else
-	globalatributes(atr);
-	}
-	else if(elem=="input"){
-	if(!strcmp(atr,"align") || !strcmp(atr,"alt") || !strcmp(atr,"accept") || !strcmp(atr,"autocomplete") || !strcmp(atr,"autofocus") || !strcmp(atr,"checked") || !strcmp(atr,"disable") || !strcmp(atr,"form") || !strcmp(atr,"formaction") || !strcmp(atr,"formenctype") || !strcmp(atr,"formmethod") || !strcmp(atr,"formnovalidate") || !strcmp(atr,"formtarget") || !strcmp(atr,"height") || !strcmp(atr,"list") || !strcmp(atr,"max") || !strcmp(atr,"maxlength") || !strcmp(atr,"min") || !strcmp(atr,"multiple") || !strcmp(atr,"name") || !strcmp(atr,"pattern") || !strcmp(atr,"placeholder") || !strcmp(atr,"readonly") || !strcmp(atr,"required") || !strcmp(atr,"size") || !strcmp(atr,"src") || !strcmp(atr,"step") || !strcmp(atr,"type") || !strcmp(atr,"value") || !strcmp(atr,"width")){}
-	else
-	globalatributes(atr);
-	}
-	else if(elem=="li"){
-	if(!strcmp(atr,"type") || !strcmp(atr,"value")){}
-	else
-	globalatributes(atr);
-	}
-	else if(elem=="link"){
-	if(!strcmp(atr,"charset") || !strcmp(atr,"href") || !strcmp(atr,"hreflang") || !strcmp(atr,"media") || !strcmp(atr,"rel") || !strcmp(atr,"rev") || !strcmp(atr,"sizes") || !strcmp(atr,"target") || !strcmp(atr,"type")){}
-	else
-	globalatributes(atr);
-	}
-	else if(elem=="meta"){
-	if(!strcmp(atr,"charset") || !strcmp(atr,"content") || !strcmp(atr,"http-equiv") || !strcmp(atr,"name")){}
-	else
-	globalatributes(atr);
-	}
-	else if(elem=="ol"){
-	if(!strcmp(atr,"reversed") || !strcmp(atr,"start") || !strcmp(atr,"type")){}
-	else
-	globalatributes(atr);
-	}
-	else if(elem=="option"){
-	if(!strcmp(atr,"disabled") || !strcmp(atr,"label") || !strcmp(atr,"selected") || !strcmp(atr,"value")){}
-	else
-	globalatributes(atr);
-	}
-	else if(elem=="script"){
-	if(!strcmp(atr,"charset") || !strcmp(atr,"async") || !strcmp(atr,"defer") || !strcmp(atr,"src") || !strcmp(atr,"type")){}
-	else
-	globalatributes(atr);
-	}
-	else if(elem=="style"){
-	if(!strcmp(atr,"media") || !strcmp(atr,"scoped") || !strcmp(atr,"type")){}
-	else
-	globalatributes(atr);
-	}
-	else if(elem=="table"){
-	if(!strcmp(atr,"align") || !strcmp(atr,"bgcolor") || !strcmp(atr,"border") || !strcmp(atr,"cellpadding") || !strcmp(atr,"cellspacing") || !strcmp(atr,"frame") || !strcmp(atr,"rules") || !strcmp(atr,"summary") || !strcmp(atr,"width")){}
-	else
-	globalatributes(atr);
-	}
-	else if(elem=="td"){
-	if(!strcmp(atr,"colspan") || !strcmp(atr,"headers") || !strcmp(atr,"rowspan")){}
-	else
-	globalatributes(atr);
-	}
-	else if(elem=="th"){
-	if(!strcmp(atr,"colspan") || !strcmp(atr,"headers") || !strcmp(atr,"rowspan") || !strcmp(atr,"scope")){}
-	else
-	globalatributes(atr);
-	}
-	else if(elem=="textarea"){
-	if(!strcmp(atr,"autofocus") || !strcmp(atr,"cols") || !strcmp(atr,"disabled") || !strcmp(atr,"form") || !strcmp(atr,"maxlength") || !strcmp(atr,"name") || !strcmp(atr,"placeholder") || !strcmp(atr,"readonly") || !strcmp(atr,"required") || !strcmp(atr,"rows") || !strcmp(atr,"wrap")){}
-	else
-	globalatributes(atr);
-	}
-	nombreAtributoLeido=NULL;
-}
 
 
-void agregarHijo(Nodo_t* padre, Nodo_t* hijo){
-	if(padre->listaHijos->primerHijo==NULL)
-		padre->listaHijos->primerHijo=hijo;
-	else{
-		Nodo_t* nodoTmp= padre->listaHijos->primerHijo;
-		while(nodoTmp->siguiente!=NULL){
-			nodoTmp=nodoTmp->siguiente;
-		}
-		nodoTmp->siguiente=hijo;
-	}
-}
-//Metodo que crea nuevos elementos del arbol sintactico
-//Recibe el valor del nodo, y el padre del nodo.
-Nodo_t* crearNodo(char* nombreNodo,Nodo_t* padre){
-	Nodo_t* nuevoNodo = malloc(sizeof(Nodo_t));
-	nuevoNodo->listaAtributos= malloc(sizeof(ListaAtributos_t));
-	nuevoNodo->listaTextos= malloc(sizeof(ListaTextos_t));
-	nuevoNodo->nombreNodo=nombreNodo;
-	nuevoNodo->padre=padre;
-	nuevoNodo->siguiente=NULL;//Al no tener hermanos en este momento nodo siguiente se inicia en NULL
-	nuevoNodo->listaHijos=malloc(sizeof(struct ListaHijos));
-	if(padre!=NULL){
-		agregarHijo(padre,nuevoNodo);
-	}
-	return nuevoNodo;
-}
-
-//Metodo que agrega un hijo a un nodo padre
-//Recibe un nodo_t padre y un nodo_t hijo
-
-
-Atributo_t* crearAtributo(char* nombreAtributo, char* valorAtributo){
-	Atributo_t* nuevoAtributo = malloc(sizeof(Atributo_t));
-	
-	nuevoAtributo->nombreAtributo=nombreAtributo;
-	nuevoAtributo->valorAtributo=valorAtributo;
-	nuevoAtributo->siguiente=NULL;//Al no tener hermanos en este momento nodo siguiente se inicia en NULL
-	return nuevoAtributo;
-}
-//Se agrega elatributo a una lista de atributos
-void agregarAtributo(ListaAtributos_t* listaAtributos, Atributo_t* atributo){
-	if(listaAtributos->primerAtributo==NULL)
-		listaAtributos->primerAtributo=atributo;
-	else{
-		Atributo_t* atributoTmp= listaAtributos->primerAtributo;
-		while(atributoTmp->siguiente!=NULL){
-			atributoTmp=atributoTmp->siguiente;
-		}
-		atributoTmp->siguiente=atributo;
-	}
-}
-
-void agregarListaAtributos(Nodo_t* nodo, ListaAtributos_t* listaAtributos){
-	nodo->listaAtributos= listaAtributos;
-}
-ListaAtributos_t* crearListaAtributos(){
-	ListaAtributos_t* listaAtributos = malloc(sizeof(ListaAtributos_t));
-	return listaAtributos;
-}
-
-Texto_t* crearTexto(char* valorTexto){
-	Texto_t* nuevoTexto = malloc(sizeof(Texto_t));
-	
-	nuevoTexto->texto= valorTexto;
-	nuevoTexto->siguiente=NULL;//Al no tener hermanos en este momento nodo siguiente se inicia en NULL
-	return nuevoTexto;
-}
-//Se agrega el texto a la lista de textos
-void agregarTexto(ListaTextos_t* listaTextos, Texto_t* texto){
-	if(listaTextos->primerTexto==NULL)
-		listaTextos->primerTexto=texto;
-	else{
-		Texto_t* textoTmp= listaTextos->primerTexto;
-		while(textoTmp->siguiente!=NULL){
-			textoTmp=textoTmp->siguiente;
-		}
-		textoTmp->siguiente=texto;
-	}
-}
-
-
-void agregarListaTextos(Nodo_t* nodo, ListaTextos_t* listaTextos){
-	/*sto es por se se da la condicion
-	 * <body>
-	 * sjaklldsak<p>djskfldsjf</p> dsfjisipjfds
-	 * </body>*/
-	Texto_t* tmpTexto = nodo->listaTextos->primerTexto;
-	if(tmpTexto!=NULL){
-		while(tmpTexto->siguiente!=NULL){
-			tmpTexto= tmpTexto->siguiente;
-		}
-		tmpTexto->siguiente= listaTextos->primerTexto;
-	}
-	else{
-		nodo->listaTextos= listaTextos;
-	}
-}
-ListaTextos_t* crearListaTextos(){
-	ListaTextos_t* listaTextos = malloc(sizeof(ListaTextos_t));
-	return listaTextos;
-}
-
-//IMpresión del arbol, el indice me indica en que nivel se encuentra
-void printArregloEntero(int numero[30], int profundidad ){
-	int i=0;
-	while(profundidad--){
-		printf(BLUE "%i."WHITE,numero[i]);
-		i++;
-	}
-}
-void printTabs(int cantidad){
-	while(cantidad--){
-		printf("    ");
-	}
-}
-void imprimirDoctype(DocType_t* doctype){	
-	printf("     "BLUE"1." RED" Doctype"GREEN " valor 1="YELLOW "%s "GREEN"valor 2 ="YELLOW " %s\n ",doctype->valor1, doctype->valor2);
-}
-void preImprimirArbol(Arbol_t* arbol){
-	imprimirDoctype(arbol->doctype);
-	int numero[30];
-	numero[0]= 2;
-	imprimirArbol(arbol->raizHtml->listaHijos->primerHijo,1,1, numero);;
-}
-
-
-
-void imprimirArbol(Nodo_t* raiz, int iProfundidad, int iAnchura, int numero[30]){
-	if(raiz!=NULL){
-		printTabs(iProfundidad);
-		printArregloEntero(numero, iProfundidad);
-		printf(RED" %s "WHITE, raiz-> nombreNodo);
-		Atributo_t* atributoTmp= raiz->listaAtributos->primerAtributo;
-		if(atributoTmp!=NULL){
-			while(atributoTmp!=NULL){
-				printf(GREEN " %s"WHITE "=" YELLOW" %s"WHITE,atributoTmp->nombreAtributo,atributoTmp->valorAtributo);
-				atributoTmp= atributoTmp->siguiente;
-			}
-		}
-		Texto_t* textoTmp = raiz->listaTextos->primerTexto;
-		printf(CYAN" texto = "WHITE);
-		if(textoTmp!=NULL){
-			while(textoTmp!=NULL){
-				printf(MAGENTA "%s "WHITE,textoTmp->texto);
-				textoTmp= textoTmp->siguiente;
-			}
-		}
-		printf("%s","\n");
-		Nodo_t* nodoTmp= raiz->listaHijos->primerHijo;
-		iAnchura=1;
-		while(nodoTmp!=NULL){
-			numero[iProfundidad]= iAnchura;
-			imprimirArbol(nodoTmp, iProfundidad+1, iAnchura, numero);
-			nodoTmp=nodoTmp->siguiente;
-			iAnchura++;
-		}
-	}
-}
-
-DocType_t* crearDocType(char* valor1, char* valor2){
-	DocType_t* nuevoDocType= malloc(sizeof(DocType_t));
-	nuevoDocType->valor1=valor1;
-	nuevoDocType->valor2=valor2;
-	return nuevoDocType;
-	
-}
 //Accion que se ejecuta cuando se lee una cabeza de un elemento html
 void accionCabezaLeida_Arbl(char* nombreTag){
 	agregarListaTextos(nodoActual,listaTextosActual);
@@ -1442,4 +1033,24 @@ void accionColaLeida_Arbl(){
 	agregarListaTextos(nodoActual,listaTextosActual);
 	listaTextosActual= crearListaTextos();
 	nodoActual= nodoActual->padre;
+}
+
+void analizarSemantico(Nodo_t* raiz){
+	if(raiz!=NULL){
+		char* elemento = raiz-> nombreNodo;
+		Atributo_t* atributoTmp= raiz->listaAtributos->primerAtributo;
+		if(atributoTmp!=NULL){
+			while(atributoTmp!=NULL){
+				char* atributo = atributoTmp->nombreAtributo;
+				char* valorAtributo = atributoTmp->valorAtributo;
+				atributoValido(elemento, atributo,valorAtributo);
+				atributoTmp= atributoTmp->siguiente;
+			}
+		}
+		Nodo_t* nodoTmp= raiz->listaHijos->primerHijo;
+		while(nodoTmp!=NULL){
+			analizarSemantico(nodoTmp);
+			nodoTmp=nodoTmp->siguiente;
+		}
+	}
 }
