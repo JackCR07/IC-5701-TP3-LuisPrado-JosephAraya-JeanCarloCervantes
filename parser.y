@@ -18,10 +18,20 @@
 
 
 
+//Variables usadas en el programa
+
+char* etiquetaLeida;//Ultima etiqueta html leida;
+char* nombreAtributoLeido;
+char* valorAtributoLeido;
+int docTypeCreado=0;
+
+
 
 //Metodo que crea nuevos elementos del arbol sintactico
 //Recibe el valor del nodo, y el padre del nodo.
 
+void accionCabezaLeida_Arbl(char* nombreTag);
+void accionColaLeida_Arbl();
  
 void analizarSemantico(Nodo_t* raiz);
 
