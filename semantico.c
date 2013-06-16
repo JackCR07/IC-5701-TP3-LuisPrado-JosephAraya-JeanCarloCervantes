@@ -9,8 +9,8 @@
  * variables y funciones necesitadas para realizar el analisis semantico                   *
  *                                                                                         *
  * Estudiantes: Joseph Araya Rojas                                                         *
- *				Luis Prado Rodríguez                                                       *
- *				Jean Carlo Cervantes                                                       *
+ *				Luis Prado Rodríguez                                       *
+ *				Jean Carlo Cervantes                                       *
  *                                                                                         *
  * Profesor: Andrei Fuentes                                                                *
  * *****************************************************************************************/
@@ -115,7 +115,7 @@ int atributoValido(char* elemento, char* atributo, char* valorAtributo, int fila
 	**************************************Verificación de atributos de b******************************
 	*************************************************************************************************/
 	else if(!strcmp(elemento,"b")){
-		return globalatributes(elemento, atributo, valorAtributo);	
+		return globalatributes(elemento,atributo,valorAtributo, filaAtri, columnaAtri, filaValor, columnaValor);	
 	}
 	/*************************************************************************************************
 	**************************************Verificación de atributos de blockquote*********************
@@ -232,7 +232,7 @@ int atributoValido(char* elemento, char* atributo, char* valorAtributo, int fila
 				return 1;
 		}
 		else
-			return globalatributes(elemento, atributo, valorAtributo);
+			return globalatributes(elemento,atributo,valorAtributo, filaAtri, columnaAtri, filaValor, columnaValor);
 	}
 
 	/*************************************************************************************************
@@ -249,7 +249,7 @@ int atributoValido(char* elemento, char* atributo, char* valorAtributo, int fila
 			}
 		}
 		else
-			return globalatributes(elemento, atributo, valorAtributo);
+			return globalatributes(elemento,atributo,valorAtributo, filaAtri, columnaAtri, filaValor, columnaValor);
 	}
 	
 	/*************************************************************************************************
@@ -287,7 +287,7 @@ int atributoValido(char* elemento, char* atributo, char* valorAtributo, int fila
 			}
 		}
 		else
-			return globalatributes(elemento, atributo, valorAtributo);
+			return globalatributes(elemento,atributo,valorAtributo, filaAtri, columnaAtri, filaValor, columnaValor);
 	}
 	/*************************************************************************************************
 	**************************************Verificación de atributos de form*************************
@@ -385,7 +385,7 @@ int atributoValido(char* elemento, char* atributo, char* valorAtributo, int fila
 			}
 		}
 		else
-			return globalatributes(elemento, atributo, valorAtributo);
+			return globalatributes(elemento,atributo,valorAtributo, filaAtri, columnaAtri, filaValor, columnaValor);
 	}
 
 	/*************************************************************************************************
@@ -500,7 +500,7 @@ int atributoValido(char* elemento, char* atributo, char* valorAtributo, int fila
 			}
 		}
 		else
-			return globalatributes(elemento, atributo, valorAtributo);
+			return globalatributes(elemento,atributo,valorAtributo, filaAtri, columnaAtri, filaValor, columnaValor);
 	}
 	/*************************************************************************************************
 	**************************************Verificación de atributos de input*************************
@@ -754,7 +754,7 @@ int atributoValido(char* elemento, char* atributo, char* valorAtributo, int fila
 		}
 		else
 		{
-			return globalatributes(elemento, atributo, valorAtributo);
+			return globalatributes(elemento,atributo,valorAtributo, filaAtri, columnaAtri, filaValor, columnaValor);
 		}
 	}
 	/*************************************************************************************************
@@ -779,7 +779,7 @@ int atributoValido(char* elemento, char* atributo, char* valorAtributo, int fila
 			}
 		}
 		else
-			return globalatributes(elemento, atributo, valorAtributo);
+			return globalatributes(elemento,atributo,valorAtributo, filaAtri, columnaAtri, filaValor, columnaValor);
 	}
 
 	/*************************************************************************************************
@@ -862,7 +862,7 @@ int atributoValido(char* elemento, char* atributo, char* valorAtributo, int fila
 			return 1;
 		}
 		else
-			return globalatributes(elemento, atributo, valorAtributo);
+			return globalatributes(elemento,atributo,valorAtributo, filaAtri, columnaAtri, filaValor, columnaValor);
 	}
 
 	/*************************************************************************************************
@@ -906,7 +906,7 @@ int atributoValido(char* elemento, char* atributo, char* valorAtributo, int fila
 			}
 		}
 		else
-			return globalatributes(elemento, atributo, valorAtributo);
+			return globalatributes(elemento,atributo,valorAtributo, filaAtri, columnaAtri, filaValor, columnaValor);
 	}
 
 	/*************************************************************************************************
@@ -940,7 +940,7 @@ int atributoValido(char* elemento, char* atributo, char* valorAtributo, int fila
 			}
 		}	
 		else
-			return globalatributes(elemento, atributo, valorAtributo);
+			return globalatributes(elemento,atributo,valorAtributo, filaAtri, columnaAtri, filaValor, columnaValor);
 	}
 	
 	/*************************************************************************************************
@@ -983,7 +983,7 @@ int atributoValido(char* elemento, char* atributo, char* valorAtributo, int fila
 			}
 		}
 		else
-			return globalatributes(elemento, atributo, valorAtributo);
+			return globalatributes(elemento,atributo,valorAtributo, filaAtri, columnaAtri, filaValor, columnaValor);
 	}
 	/*************************************************************************************************
 	**************************************Verificación de atributos de script*************************
@@ -1027,7 +1027,7 @@ int atributoValido(char* elemento, char* atributo, char* valorAtributo, int fila
 			return 1;//No implementamos MMTYpe
 		}
 		else
-			return globalatributes(elemento, atributo, valorAtributo);
+			return globalatributes(elemento,atributo,valorAtributo, filaAtri, columnaAtri, filaValor, columnaValor);
 	}
 	/*************************************************************************************************
 	**************************************Verificación de atributos de style*************************
@@ -1054,7 +1054,7 @@ int atributoValido(char* elemento, char* atributo, char* valorAtributo, int fila
 			return 1;//No implementamos mmtype
 		}
 		else
-			return globalatributes(elemento, atributo, valorAtributo);
+			return globalatributes(elemento,atributo,valorAtributo, filaAtri, columnaAtri, filaValor, columnaValor);
 	}
 	
 	/*************************************************************************************************
@@ -1140,7 +1140,7 @@ int atributoValido(char* elemento, char* atributo, char* valorAtributo, int fila
 			}
 		}
 		else
-			return globalatributes(elemento, atributo, valorAtributo);
+			return globalatributes(elemento,atributo,valorAtributo, filaAtri, columnaAtri, filaValor, columnaValor);
 	}
 	
 	/*************************************************************************************************
@@ -1176,7 +1176,7 @@ int atributoValido(char* elemento, char* atributo, char* valorAtributo, int fila
 			}
 		}
 		else
-			return globalatributes(elemento, atributo, valorAtributo);
+			return globalatributes(elemento,atributo,valorAtributo, filaAtri, columnaAtri, filaValor, columnaValor);
 	}
 	/*************************************************************************************************
 	**************************************Verificación de atributos de th*************************
@@ -1218,7 +1218,7 @@ int atributoValido(char* elemento, char* atributo, char* valorAtributo, int fila
 			}
 		}
 		else
-			return globalatributes(elemento, atributo, valorAtributo);
+			return globalatributes(elemento,atributo,valorAtributo, filaAtri, columnaAtri, filaValor, columnaValor);
 	}
 	/*************************************************************************************************
 	**************************************Verificación de atributos de textarea*************************
@@ -1324,7 +1324,7 @@ int atributoValido(char* elemento, char* atributo, char* valorAtributo, int fila
 			} 
 		}
 		else
-			return globalatributes(elemento, atributo, valorAtributo);
+			return globalatributes(elemento,atributo,valorAtributo, filaAtri, columnaAtri, filaValor, columnaValor);
 	}
 }
 
