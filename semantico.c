@@ -61,7 +61,26 @@ int isExpReg(char* expReg, char* dato){
     return 0;
     	
 }
+////////////////////////////////////////
 
+// funcion que indica warnings // tipo 1=obsoleto 0=solo html5
+
+void printWarnings(char* elemento, int filaValor, int columnaValor,int tipo) 
+{
+	if(tipo)
+	{
+		fprintf(stderr,YELLOW"Advertencia en:"WHITE" Fila: "BLUE"%d"WHITE" Columna: "BLUE"%d"WHITE" ,Elemento obsoleto para html5: "BLUE"%s"WHITE".\n",
+		filaValor, columnaValor,elemento);
+	}
+	else
+	{
+		fprintf(stderr,YELLOW"Advertencia en:"WHITE" Fila: "BLUE"%d"WHITE" Columna: "BLUE"%d"WHITE" ,Elemento válido sólo para html5: "BLUE"%s"WHITE".\n",
+		filaValor, columnaValor,elemento);	
+		
+	}
+}
+
+////////////   		printWarnings(elemento,filaValor,columnaValor,1);//// arreglar columna 	
 void printErrorSemantico(char* elemento, char* atributo, char* valorAtributo, int filaAtri, int columnaAtri, int filaValor, int columnaValor){
 	fprintf(stderr,RED"Error semantico:"WHITE" Fila: "BLUE"%d"WHITE" Columna: "BLUE"%d"WHITE" ,Formato incorrecto en el valor: "BLUE"%s"WHITE", "WHITE"del atributo "BLUE"%s"WHITE", perteneciente al elemento  "BLUE"%s"WHITE".\n",filaValor, columnaValor, valorAtributo, atributo,elemento);
 }
@@ -257,6 +276,9 @@ int atributoValido(char* elemento, char* atributo, char* valorAtributo, int fila
 	*************************************************************************************************/
 
 	else if(!strcmp(elemento,"embed")){
+		
+		printWarnings(elemento,filaValor,columnaValor,0);//// tipo 1=obsoleto 0=solo html5
+		
 		if(!strcmp(atributo,"height")){
 			if(!isExpReg(numero,valorAtributo)){
 				printErrorSemantico(elemento, atributo, valorAtributo, filaAtri, columnaAtri, filaValor, columnaValor);
@@ -727,7 +749,13 @@ int atributoValido(char* elemento, char* atributo, char* valorAtributo, int fila
 		}	
 		else if(!strcmp(atributo,"type")){
 			if(!strcmp(valorAtributo,"button") || !strcmp(valorAtributo,"checkbox")|| !strcmp(valorAtributo,"color")|| !strcmp(valorAtributo,"date" ) || !strcmp(valorAtributo,"datetime") || !strcmp(valorAtributo,"datetime-local")|| !strcmp(valorAtributo,"email" ) || !strcmp(valorAtributo,"file")|| !strcmp(valorAtributo,"hidden")|| !strcmp(valorAtributo,"image")|| !strcmp(valorAtributo,"month" )|| !strcmp(valorAtributo,"number")|| !strcmp(valorAtributo,"password")|| !strcmp(valorAtributo,"radio")|| !strcmp(valorAtributo,"range")|| !strcmp(valorAtributo,"reset")|| !strcmp(valorAtributo,"search")|| !strcmp(valorAtributo,"submit")|| !strcmp(valorAtributo,"tel")|| !strcmp(valorAtributo,"text")||	!strcmp(valorAtributo,"time" )|| !strcmp(valorAtributo,"url")|| !strcmp(valorAtributo,"week" ))
+			{	
+				if(!strcmp(valorAtributo,"hidden"))
+				{
+					printWarnings(atributo,filaAtri,columnaAtri,0);//// tipo 1=obsoleto 0=solo html5
+				}
 				return 1;
+			}	
 			else{
 				printErrorSemantico(elemento, atributo, valorAtributo, filaAtri, columnaAtri, filaValor, columnaValor);
 				return -1;
@@ -1351,6 +1379,7 @@ int globalatributes(char* elemento, char* atributo, char* valorAtributo, int fil
 			return 1;
 	} 
 	else if(!strcmp(atributo,"contenteditable")){
+		printWarnings(atributo,filaAtri,columnaAtri,0);//// tipo 1=obsoleto 0=solo html5
 		if(!strcmp(atributo,"true") || !strcmp(atributo,"false") || !strcmp(atributo,"inherit"))
 			return 1;
 		else
@@ -1360,6 +1389,7 @@ int globalatributes(char* elemento, char* atributo, char* valorAtributo, int fil
 		}
 	} 
 	else if(!strcmp(atributo,"contextmenu")){
+		printWarnings(atributo,filaAtri,columnaAtri,0);//// tipo 1=obsoleto 0=solo html5
 		if(!isExpReg(texto,valorAtributo)){
 			printErrorSemantico(elemento, atributo, valorAtributo, filaAtri, columnaAtri, filaValor, columnaValor);
 			return -1;
@@ -1376,6 +1406,7 @@ int globalatributes(char* elemento, char* atributo, char* valorAtributo, int fil
 			return -1;
 		}
 	} else if(!strcmp(atributo,"draggable")){
+		printWarnings(atributo,filaAtri,columnaAtri,0);//// tipo 1=obsoleto 0=solo html5
 		if(!strcmp(valorAtributo,"true") || !strcmp(valorAtributo,"false") || !strcmp(valorAtributo,"auto"))
 			return 1;
 		else
@@ -1385,6 +1416,7 @@ int globalatributes(char* elemento, char* atributo, char* valorAtributo, int fil
 		}
 	}
 	else if(!strcmp(atributo,"dropzone")){
+		printWarnings(atributo,filaAtri,columnaAtri,0);//// tipo 1=obsoleto 0=solo html5
 		if(!strcmp(valorAtributo,"copy") || !strcmp(valorAtributo,"move") || !strcmp(valorAtributo,"link"))
 			return 1;
 		else
@@ -1394,6 +1426,7 @@ int globalatributes(char* elemento, char* atributo, char* valorAtributo, int fil
 		}
 	} 
 	else if(!strcmp(atributo,"hidden")){
+		printWarnings(atributo,filaAtri,columnaAtri,0);//// tipo 1=obsoleto 0=solo html5
 		if(!strcmp(valorAtributo,"hidden"))
 			return 1;
 		else
@@ -1417,6 +1450,7 @@ int globalatributes(char* elemento, char* atributo, char* valorAtributo, int fil
 		else
 			return 1;
 	} else if(!strcmp(atributo,"spellcheck")){
+		printWarnings(atributo,filaAtri,columnaAtri,0);//// tipo 1=obsoleto 0=solo html5
 		if(!strcmp(valorAtributo,"true") || !strcmp(valorAtributo,"false"))
 			return 1;
 		else
@@ -1442,6 +1476,7 @@ int globalatributes(char* elemento, char* atributo, char* valorAtributo, int fil
 		else
 			return 1;
 	}else if(!strcmp(atributo,"translate")){
+		printWarnings(atributo,filaAtri,columnaAtri,0);//// tipo 1=obsoleto 0=solo html5
 		if(!strcmp(valorAtributo,"translate"))
 			return 1;
 		else
@@ -1463,6 +1498,10 @@ int eventAtributtes(char* elemento, char* atributo, char* valorAtributo,int fila
 	
 	if(!strcmp(atributo,"onblur") || !strcmp(atributo,"onchange") || !strcmp(atributo,"onclick") || !strcmp(atributo,"ondblclick")|| !strcmp(atributo,"onfocus")|| !strcmp(atributo,"onkeydown")|| !strcmp(atributo,"onkeypress")|| !strcmp(atributo,"onkeyup")|| !strcmp(atributo,"onload")|| !strcmp(atributo,"onmousedown")|| !strcmp(atributo,"onmousemove")|| !strcmp(atributo,"onmouseout")|| !strcmp(atributo,"onmouseover")|| !strcmp(atributo,"onmouseup")|| !strcmp(atributo,"onreset")|| !strcmp(atributo,"onselect")|| !strcmp(atributo,"onsubmit")|| !strcmp(atributo,"onunload"))
 	{
+		if(!strcmp(atributo,"onreset"))
+		{
+			printWarnings(atributo,filaAtri,columnaAtri,1);//// tipo 1=obsoleto 0=solo html5
+		}
 		return 1;
 	}
 	else{
