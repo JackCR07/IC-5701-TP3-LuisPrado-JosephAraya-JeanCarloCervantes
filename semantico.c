@@ -166,7 +166,10 @@ int atributoValido(char* elemento, char* atributo, char* valorAtributo, int fila
 	else if(!strcmp(elemento,"button")){
 		if(!strcmp(atributo,"autofocus")){
 			if(!strcmp(valorAtributo,"autofocus"))
+			{
+				printWarnings(atributo,filaAtri,columnaAtri,0);//// tipo 1=obsoleto 0=solo html5
 				return 1;
+			}
 			else
 			{
 				printErrorSemantico(elemento, atributo, valorAtributo, filaAtri, columnaAtri, filaValor, columnaValor);
@@ -183,6 +186,7 @@ int atributoValido(char* elemento, char* atributo, char* valorAtributo, int fila
 			}
 		}
 		else if(!strcmp(atributo,"form")){
+			printWarnings(atributo,filaAtri,columnaAtri,0);//// tipo 1=obsoleto 0=solo html5
 			if(!isExpReg(texto,valorAtributo)){
 				printErrorSemantico(elemento, atributo, valorAtributo, filaAtri, columnaAtri, filaValor, columnaValor);
 				return -1;
@@ -191,6 +195,7 @@ int atributoValido(char* elemento, char* atributo, char* valorAtributo, int fila
 				return 1;
 		}
 		else if(!strcmp(atributo,"formaction")){
+			printWarnings(atributo,filaAtri,columnaAtri,0);//// tipo 1=obsoleto 0=solo html5
 			if(!isExpReg(url,valorAtributo)){
 				printErrorSemantico(elemento, atributo, valorAtributo, filaAtri, columnaAtri, filaValor, columnaValor);
 				return -1;
@@ -199,6 +204,7 @@ int atributoValido(char* elemento, char* atributo, char* valorAtributo, int fila
 				return 1;
 			}
 		}else if(!strcmp(atributo,"formenctype")){
+			printWarnings(atributo,filaAtri,columnaAtri,0);//// tipo 1=obsoleto 0=solo html5
 			if( !strcmp(valorAtributo,"application/x-www-form-urlencoded") || !strcmp(valorAtributo,"multipart/form-data") || !strcmp(valorAtributo,"text/plain"))
 				return 1;
 			else{
@@ -206,6 +212,7 @@ int atributoValido(char* elemento, char* atributo, char* valorAtributo, int fila
 				return -1;
 			}
 		}else if(!strcmp(atributo,"formmethod")){
+			printWarnings(atributo,filaAtri,columnaAtri,0);//// tipo 1=obsoleto 0=solo html5
 			if( !strcmp(valorAtributo,"get") || !strcmp(valorAtributo,"post"))
 				return 1;
 			else{
@@ -213,6 +220,7 @@ int atributoValido(char* elemento, char* atributo, char* valorAtributo, int fila
 				return -1;
 			}
 		}else if(!strcmp(atributo,"formnovalidate")){
+			printWarnings(atributo,filaAtri,columnaAtri,0);//// tipo 1=obsoleto 0=solo html5
 			if( !strcmp(valorAtributo,"formnovalidate"))
 				return 1;
 			else{
@@ -220,6 +228,7 @@ int atributoValido(char* elemento, char* atributo, char* valorAtributo, int fila
 				return -1;
 			}
 		}else if(!strcmp(atributo,"formtarget")){
+			printWarnings(atributo,filaAtri,columnaAtri,0);//// tipo 1=obsoleto 0=solo html5
 			if( !strcmp(valorAtributo,"formtarget"))
 				return 1;
 			else{
@@ -260,6 +269,7 @@ int atributoValido(char* elemento, char* atributo, char* valorAtributo, int fila
 
 	else if(!strcmp(elemento,"caption")){
 		if(!strcmp(atributo,"align")){
+			printWarnings(atributo,filaAtri,columnaAtri,1);//// tipo 1=obsoleto 0=solo html5
 			if( !strcmp(valorAtributo,"left") || !strcmp(valorAtributo,"right") || !strcmp(valorAtributo,"top") || !strcmp(valorAtributo,"botton"))
 				return 1;
 			else{
@@ -336,6 +346,7 @@ int atributoValido(char* elemento, char* atributo, char* valorAtributo, int fila
 			}
 		}
 		else if(!strcmp(atributo,"autocomplete")){
+			printWarnings(atributo,filaAtri,columnaAtri,0);//// tipo 1=obsoleto 0=solo html5
 			if( !strcmp(valorAtributo,"on") || !strcmp(valorAtributo,"off"))
 				return 1;
 			else{
@@ -368,6 +379,7 @@ int atributoValido(char* elemento, char* atributo, char* valorAtributo, int fila
 			}
 
 		}else if(!strcmp(atributo,"novalidate")){
+			printWarnings(atributo,filaAtri,columnaAtri,0);//// tipo 1=obsoleto 0=solo html5
 			if( !strcmp(valorAtributo,"novalidate"))
 				return 1;
 			else{
@@ -391,6 +403,7 @@ int atributoValido(char* elemento, char* atributo, char* valorAtributo, int fila
 	
 	else if(!strcmp(elemento,"html")){
 		if(!strcmp(atributo,"manifest")){
+			printWarnings(atributo,filaAtri,columnaAtri,0);//// tipo 1=obsoleto 0=solo html5
 			if(!isExpReg(url,valorAtributo)){
 				printErrorSemantico(elemento, atributo, valorAtributo, filaAtri, columnaAtri, filaValor, columnaValor);
 				return -1;
@@ -417,6 +430,7 @@ int atributoValido(char* elemento, char* atributo, char* valorAtributo, int fila
 	
 	else if(!strcmp(elemento,"img")){
 		if(!strcmp(atributo,"align")){
+			printWarnings(atributo,filaAtri,columnaAtri,1);//// tipo 1=obsoleto 0=solo html5
 			if( !strcmp(valorAtributo,"left") || !strcmp(valorAtributo,"right") || !strcmp(valorAtributo,"top") || !strcmp(valorAtributo,"botton") || !strcmp(valorAtributo,"middle"))
 				return 1;
 			else{
@@ -433,6 +447,7 @@ int atributoValido(char* elemento, char* atributo, char* valorAtributo, int fila
 				return 1;
 			}
 		else if(!strcmp(atributo,"border")){
+			printWarnings(atributo,filaAtri,columnaAtri,1);//// tipo 1=obsoleto 0=solo html5
 			if(!isExpReg(numero,valorAtributo)){
 				printErrorSemantico(elemento, atributo, valorAtributo, filaAtri, columnaAtri, filaValor, columnaValor);
 				return -1;
@@ -442,6 +457,7 @@ int atributoValido(char* elemento, char* atributo, char* valorAtributo, int fila
 			}
 		}
 		else if(!strcmp(atributo,"crossorigin")){
+			printWarnings(atributo,filaAtri,columnaAtri,0);//// tipo 1=obsoleto 0=solo html5
 			if( !strcmp(valorAtributo,"anonymous") || !strcmp(valorAtributo,"use-credentials"))
 				return 1;
 			else{
@@ -459,6 +475,7 @@ int atributoValido(char* elemento, char* atributo, char* valorAtributo, int fila
 			}
 		}
 		else if(!strcmp(atributo,"hspace")){
+			printWarnings(atributo,filaAtri,columnaAtri,1);//// tipo 1=obsoleto 0=solo html5
 			if(!isExpReg(numero,valorAtributo)){
 				printErrorSemantico(elemento, atributo, valorAtributo, filaAtri, columnaAtri, filaValor, columnaValor);
 				return -1;
@@ -476,6 +493,7 @@ int atributoValido(char* elemento, char* atributo, char* valorAtributo, int fila
 			}
 		}
 		else if(!strcmp(atributo,"longdesc")){
+			printWarnings(atributo,filaAtri,columnaAtri,1);//// tipo 1=obsoleto 0=solo html5
 			if(!isExpReg(url,valorAtributo)){
 				printErrorSemantico(elemento, atributo, valorAtributo, filaAtri, columnaAtri, filaValor, columnaValor);
 				return -1;
@@ -529,6 +547,7 @@ int atributoValido(char* elemento, char* atributo, char* valorAtributo, int fila
 	*************************************************************************************************/
 	else if(!strcmp(elemento,"input")){
 		if(!strcmp(atributo,"align")){
+			printWarnings(atributo,filaAtri,columnaAtri,1);//// tipo 1=obsoleto 0=solo html5
 			if( !strcmp(valorAtributo,"left") || !strcmp(valorAtributo,"right") || !strcmp(valorAtributo,"top") || !strcmp(valorAtributo,"botton") || !strcmp(valorAtributo,"middle"))
 				return 1;
 			else{
@@ -546,6 +565,7 @@ int atributoValido(char* elemento, char* atributo, char* valorAtributo, int fila
 			}
 		}
 		else if(!strcmp(atributo,"autocomplete")){
+			printWarnings(atributo,filaAtri,columnaAtri,0);//// tipo 1=obsoleto 0=solo html5
 			if( !strcmp(valorAtributo,"on") || !strcmp(valorAtributo,"off"))
 				return 1;
 			else{
@@ -554,6 +574,7 @@ int atributoValido(char* elemento, char* atributo, char* valorAtributo, int fila
 			}
 		}
 		else if(!strcmp(atributo,"autofocus")){
+			printWarnings(atributo,filaAtri,columnaAtri,0);//// tipo 1=obsoleto 0=solo html5
 			if(!strcmp(valorAtributo,"autofocus"))
 				return 1;
 			else
@@ -581,6 +602,7 @@ int atributoValido(char* elemento, char* atributo, char* valorAtributo, int fila
 			}
 		}
 		else if(!strcmp(atributo,"form")){
+			printWarnings(atributo,filaAtri,columnaAtri,0);//// tipo 1=obsoleto 0=solo html5
 			if(!isExpReg(texto,valorAtributo)){
 				printErrorSemantico(elemento, atributo, valorAtributo, filaAtri, columnaAtri, filaValor, columnaValor);
 				return -1;
@@ -590,6 +612,7 @@ int atributoValido(char* elemento, char* atributo, char* valorAtributo, int fila
 			}
 		}
 		else if(!strcmp(atributo,"formaction")){
+			printWarnings(atributo,filaAtri,columnaAtri,0);//// tipo 1=obsoleto 0=solo html5
 			if(!isExpReg(url,valorAtributo)){
 				printErrorSemantico(elemento, atributo, valorAtributo, filaAtri, columnaAtri, filaValor, columnaValor);
 				return -1;
@@ -599,6 +622,7 @@ int atributoValido(char* elemento, char* atributo, char* valorAtributo, int fila
 			}
 		}
 		else if(!strcmp(atributo,"formenctype")){
+			printWarnings(atributo,filaAtri,columnaAtri,0);//// tipo 1=obsoleto 0=solo html5
 			if( !strcmp(valorAtributo,"application/x-www-form-urlencoded") || !strcmp(valorAtributo,"multipart/form-data") || !strcmp(valorAtributo,"text/plain"))
 				return 1;
 			else{
@@ -606,6 +630,7 @@ int atributoValido(char* elemento, char* atributo, char* valorAtributo, int fila
 			}
 		}
 		else if(!strcmp(atributo,"formmethod")){
+			printWarnings(atributo,filaAtri,columnaAtri,0);//// tipo 1=obsoleto 0=solo html5
 			if( !strcmp(valorAtributo,"get") || !strcmp(valorAtributo,"post"))
 				return 1;
 			else{
@@ -614,6 +639,7 @@ int atributoValido(char* elemento, char* atributo, char* valorAtributo, int fila
 			}
 		}
 		else if(!strcmp(atributo,"formnovalidate")){
+			printWarnings(atributo,filaAtri,columnaAtri,0);//// tipo 1=obsoleto 0=solo html5
 			if( !strcmp(valorAtributo,"formnovalidate"))
 				return 1;
 			else{
@@ -622,6 +648,7 @@ int atributoValido(char* elemento, char* atributo, char* valorAtributo, int fila
 			}
 		}
 		else if(!strcmp(atributo,"formtarget")){
+			printWarnings(atributo,filaAtri,columnaAtri,0);//// tipo 1=obsoleto 0=solo html5
 			if( !strcmp(valorAtributo,"formtarget"))
 				return 1;
 			else{
@@ -630,6 +657,7 @@ int atributoValido(char* elemento, char* atributo, char* valorAtributo, int fila
 			}
 		}
 		else if(!strcmp(atributo,"height")){
+			printWarnings(atributo,filaAtri,columnaAtri,0);//// tipo 1=obsoleto 0=solo html5
 			if(!isExpReg(numero,valorAtributo)){
 				printErrorSemantico(elemento, atributo, valorAtributo, filaAtri, columnaAtri, filaValor, columnaValor);
 				return -1;
@@ -639,6 +667,7 @@ int atributoValido(char* elemento, char* atributo, char* valorAtributo, int fila
 			}
 		}
 		else if(!strcmp(atributo,"list")){
+			printWarnings(atributo,filaAtri,columnaAtri,0);//// tipo 1=obsoleto 0=solo html5
 			if(!isExpReg(texto,valorAtributo)){
 				printErrorSemantico(elemento, atributo, valorAtributo, filaAtri, columnaAtri, filaValor, columnaValor);
 				return -1;
@@ -648,6 +677,7 @@ int atributoValido(char* elemento, char* atributo, char* valorAtributo, int fila
 			}
 		}
 		else if(!strcmp(atributo,"max")){
+			printWarnings(atributo,filaAtri,columnaAtri,0);//// tipo 1=obsoleto 0=solo html5
 			if(!isExpReg(numero,valorAtributo) && !isExpReg(fecha, valorAtributo)){
 				printErrorSemantico(elemento, atributo, valorAtributo, filaAtri, columnaAtri, filaValor, columnaValor);
 				return -1;
@@ -666,6 +696,7 @@ int atributoValido(char* elemento, char* atributo, char* valorAtributo, int fila
 			}
 		}
 		else if(!strcmp(atributo,"min")){
+			printWarnings(atributo,filaAtri,columnaAtri,0);//// tipo 1=obsoleto 0=solo html5
 			if(!isExpReg(numero,valorAtributo) && !isExpReg(fecha, valorAtributo)){
 				printErrorSemantico(elemento, atributo, valorAtributo, filaAtri, columnaAtri, filaValor, columnaValor);
 				return -1;
@@ -675,6 +706,7 @@ int atributoValido(char* elemento, char* atributo, char* valorAtributo, int fila
 			}
 		}
 		else if(!strcmp(atributo,"multiple")){
+			printWarnings(atributo,filaAtri,columnaAtri,0);//// tipo 1=obsoleto 0=solo html5
 			if( !strcmp(valorAtributo,"multiple"))
 				return 1;
 			else{
@@ -692,10 +724,12 @@ int atributoValido(char* elemento, char* atributo, char* valorAtributo, int fila
 			}
 		}
 		else if(!strcmp(atributo,"pattern")){
+			printWarnings(atributo,filaAtri,columnaAtri,0);//// tipo 1=obsoleto 0=solo html5
 			//Utiliza expresiones regulares y no podemos hacer una expresíon regular para reconocer
 			//expresiones regulares, es basstante complejo
 		}
 		else if(!strcmp(atributo,"placeholder")){
+			printWarnings(atributo,filaAtri,columnaAtri,0);//// tipo 1=obsoleto 0=solo html5
 			if(!isExpReg(textoWithSpace,valorAtributo)){
 				printErrorSemantico(elemento, atributo, valorAtributo, filaAtri, columnaAtri, filaValor, columnaValor);
 				return -1;
@@ -713,6 +747,7 @@ int atributoValido(char* elemento, char* atributo, char* valorAtributo, int fila
 			}
 		}
 		else if(!strcmp(atributo,"required")){
+			printWarnings(atributo,filaAtri,columnaAtri,0);//// tipo 1=obsoleto 0=solo html5
 			if( !strcmp(valorAtributo,"required"))
 				return 1;
 			else{
@@ -739,6 +774,7 @@ int atributoValido(char* elemento, char* atributo, char* valorAtributo, int fila
 			}
 		}
 		else if(!strcmp(atributo,"step")){
+			printWarnings(atributo,filaAtri,columnaAtri,0);//// tipo 1=obsoleto 0=solo html5
 			if(!isExpReg(numero,valorAtributo) && !isExpReg(fecha, valorAtributo)){
 				printErrorSemantico(elemento, atributo, valorAtributo, filaAtri, columnaAtri, filaValor, columnaValor);
 				return -1;
@@ -771,7 +807,7 @@ int atributoValido(char* elemento, char* atributo, char* valorAtributo, int fila
 			}
 		}
 		else if(!strcmp(atributo,"width"))
-		{
+		{printWarnings(atributo,filaAtri,columnaAtri,0);//// tipo 1=obsoleto 0=solo html5
 			if(!isExpReg(numero,valorAtributo) && !isExpReg(fecha, valorAtributo)){
 				printErrorSemantico(elemento, atributo, valorAtributo, filaAtri, columnaAtri, filaValor, columnaValor);
 				return -1;
@@ -790,6 +826,7 @@ int atributoValido(char* elemento, char* atributo, char* valorAtributo, int fila
 	*************************************************************************************************/
 	else if(!strcmp(elemento,"li")){
 		if(!strcmp(atributo,"type")){
+			printWarnings(atributo,filaAtri,columnaAtri,1);//// tipo 1=obsoleto 0=solo html5
 			if(!strcmp(valorAtributo,"1") || !strcmp(valorAtributo,"a") ||!strcmp(valorAtributo,"A") ||!strcmp(valorAtributo,"i") ||!strcmp(valorAtributo,"I") ||!strcmp(valorAtributo,"disc") ||!strcmp(valorAtributo,"circle") ||!strcmp(valorAtributo,"square"))
 				return 1;
 			else{
@@ -817,6 +854,7 @@ int atributoValido(char* elemento, char* atributo, char* valorAtributo, int fila
 	else if(!strcmp(elemento,"link")){
 		if(!strcmp(atributo,"charset"))
 		{
+			printWarnings(atributo,filaAtri,columnaAtri,1);//// tipo 1=obsoleto 0=solo html5
 			if(!isExpReg(codificacion,valorAtributo)){
 				printErrorSemantico(elemento, atributo, valorAtributo, filaAtri, columnaAtri, filaValor, columnaValor);
 				return -1;
@@ -861,6 +899,7 @@ int atributoValido(char* elemento, char* atributo, char* valorAtributo, int fila
 			}
 		}
 		else if(!strcmp(atributo,"rev")){
+			printWarnings(atributo,filaAtri,columnaAtri,1);//// tipo 1=obsoleto 0=solo html5
 			if(!strcmp(valorAtributo,"alternate") || !strcmp(valorAtributo,"bookmark")  ||!strcmp(valorAtributo,"help") || !strcmp(valorAtributo,"start") || !strcmp(valorAtributo,"next") ||  !strcmp(valorAtributo,"contents") || !strcmp(valorAtributo,"index") || !strcmp(valorAtributo,"glossary") || !strcmp(valorAtributo,"copyrigth") || !strcmp(valorAtributo,"chapter") || !strcmp(valorAtributo,"prev") || !strcmp(valorAtributo,"section") || !strcmp(valorAtributo,"subsection") || !strcmp(valorAtributo,"styleheet") || !strcmp(valorAtributo,"appendix"))
 				return 1;
 			else{
@@ -869,6 +908,7 @@ int atributoValido(char* elemento, char* atributo, char* valorAtributo, int fila
 			}
 		}
 		else if(!strcmp(atributo,"sizes")){
+			printWarnings(atributo,filaAtri,columnaAtri,0);//// tipo 1=obsoleto 0=solo html5
 			if(!isExpReg(sizes,valorAtributo)){
 				printErrorSemantico(elemento, atributo, valorAtributo, filaAtri, columnaAtri, filaValor, columnaValor);
 				return -1;
@@ -878,6 +918,7 @@ int atributoValido(char* elemento, char* atributo, char* valorAtributo, int fila
 			}
 		}
 		else if(!strcmp(atributo,"target")){
+			printWarnings(atributo,filaAtri,columnaAtri,1);//// tipo 1=obsoleto 0=solo html5
 			if( !strcmp(valorAtributo,"_blank") || !strcmp(valorAtributo,"_self") || !strcmp(valorAtributo,"_parent") || !strcmp(valorAtributo,"_top"))
 				return 1;
 			else{
@@ -899,6 +940,7 @@ int atributoValido(char* elemento, char* atributo, char* valorAtributo, int fila
 
 	else if(!strcmp(elemento,"meta")){
 		if(!strcmp(atributo,"charset")){
+			printWarnings(atributo,filaAtri,columnaAtri,0);//// tipo 1=obsoleto 0=solo html5
 			if(!isExpReg(codificacion,valorAtributo)){
 				printErrorSemantico(elemento, atributo, valorAtributo, filaAtri, columnaAtri, filaValor, columnaValor);
 				return -1;
@@ -908,6 +950,7 @@ int atributoValido(char* elemento, char* atributo, char* valorAtributo, int fila
 			}
 		}
 		else if(!strcmp(atributo,"content")){
+			
 			if(!isExpReg(textoWithSpace,valorAtributo)){
 				printErrorSemantico(elemento, atributo, valorAtributo, filaAtri, columnaAtri, filaValor, columnaValor);
 				return -1;
@@ -943,6 +986,7 @@ int atributoValido(char* elemento, char* atributo, char* valorAtributo, int fila
 
 	else if(!strcmp(elemento,"ol")){
 		if(!strcmp(atributo,"reversed")){
+			printWarnings(atributo,filaAtri,columnaAtri,0);//// tipo 1=obsoleto 0=solo html5
 			if( !strcmp(valorAtributo,"reversed"))
 				return 1;
 			else{
@@ -960,6 +1004,7 @@ int atributoValido(char* elemento, char* atributo, char* valorAtributo, int fila
 			}
 		}
 		else if(!strcmp(atributo,"type")){
+			printWarnings(atributo,filaAtri,columnaAtri,0);//// tipo 1=obsoleto 0=solo html5
 			if( !strcmp(valorAtributo,"1") || !strcmp(valorAtributo,"A") || !strcmp(valorAtributo,"a") || !strcmp(valorAtributo,"I") || !strcmp(valorAtributo,"i"))
 				return 1;
 			else{
@@ -1027,6 +1072,7 @@ int atributoValido(char* elemento, char* atributo, char* valorAtributo, int fila
 			}
 		}
 		else if(!strcmp(atributo,"async")){
+			printWarnings(atributo,filaAtri,columnaAtri,0);//// tipo 1=obsoleto 0=solo html5
 			if( !strcmp(valorAtributo,"async"))
 				return 1;
 			else{
@@ -1052,6 +1098,7 @@ int atributoValido(char* elemento, char* atributo, char* valorAtributo, int fila
 			}
 		}
 		else if(!strcmp(atributo,"type")){
+			printWarnings(atributo,filaAtri,columnaAtri,0);//// tipo 1=obsoleto 0=solo html5
 			return 1;//No implementamos MMTYpe
 		}
 		else
@@ -1062,6 +1109,7 @@ int atributoValido(char* elemento, char* atributo, char* valorAtributo, int fila
 	*************************************************************************************************/
 	else if(!strcmp(elemento,"style")){
 		if(!strcmp(atributo,"media")){
+			printWarnings(atributo,filaAtri,columnaAtri,0);//// tipo 1=obsoleto 0=solo html5
 			if(!isExpReg(texto,valorAtributo)){
 				printErrorSemantico(elemento, atributo, valorAtributo, filaAtri, columnaAtri, filaValor, columnaValor);
 				return -1;
@@ -1071,6 +1119,7 @@ int atributoValido(char* elemento, char* atributo, char* valorAtributo, int fila
 			}
 		}
 		else if(!strcmp(atributo,"scoped")){
+			printWarnings(atributo,filaAtri,columnaAtri,0);//// tipo 1=obsoleto 0=solo html5
 			if( !strcmp(valorAtributo,"scopped"))
 				return 1;
 			else{
@@ -1091,6 +1140,7 @@ int atributoValido(char* elemento, char* atributo, char* valorAtributo, int fila
 	
 	else if(!strcmp(elemento,"table")){
 		if(!strcmp(atributo,"align")){
+			printWarnings(atributo,filaAtri,columnaAtri,1);//// tipo 1=obsoleto 0=solo html5
 			if( !strcmp(valorAtributo,"left") || !strcmp(valorAtributo,"right") || !strcmp(valorAtributo,"top") || !strcmp(valorAtributo,"botton") || !strcmp(valorAtributo,"middle"))
 				return 1;
 			else{
@@ -1099,6 +1149,7 @@ int atributoValido(char* elemento, char* atributo, char* valorAtributo, int fila
 			}
 		}
 		else if(!strcmp(atributo,"bgcolor")){
+			printWarnings(atributo,filaAtri,columnaAtri,1);//// tipo 1=obsoleto 0=solo html5
 			if(!isExpReg(bgcolor,valorAtributo)){
 				printErrorSemantico(elemento, atributo, valorAtributo, filaAtri, columnaAtri, filaValor, columnaValor);
 				return -1;
@@ -1116,6 +1167,7 @@ int atributoValido(char* elemento, char* atributo, char* valorAtributo, int fila
 			}
 		}
 		else if(!strcmp(atributo,"cellpadding")){
+			printWarnings(atributo,filaAtri,columnaAtri,1);//// tipo 1=obsoleto 0=solo html5
 			if(!isExpReg(numero,valorAtributo)){
 				printErrorSemantico(elemento, atributo, valorAtributo, filaAtri, columnaAtri, filaValor, columnaValor);
 				return -1;
@@ -1125,6 +1177,7 @@ int atributoValido(char* elemento, char* atributo, char* valorAtributo, int fila
 			}
 		}
 		else if(!strcmp(atributo,"cellspacing")){
+			printWarnings(atributo,filaAtri,columnaAtri,1);//// tipo 1=obsoleto 0=solo html5
 			if(!isExpReg(numero,valorAtributo)){
 				printErrorSemantico(elemento, atributo, valorAtributo, filaAtri, columnaAtri, filaValor, columnaValor);
 				return -1;
@@ -1134,6 +1187,7 @@ int atributoValido(char* elemento, char* atributo, char* valorAtributo, int fila
 			}
 		}
 		else if(strcmp(atributo,"frame")){
+			printWarnings(atributo,filaAtri,columnaAtri,1);//// tipo 1=obsoleto 0=solo html5
 			if( !strcmp(valorAtributo,"void") || !strcmp(valorAtributo,"above") || !strcmp(valorAtributo,"below") || !strcmp(valorAtributo,"hsides") || !strcmp(valorAtributo,"lhs") || !strcmp(valorAtributo,"rhs")  || !strcmp(valorAtributo,"vsides")  || !strcmp(valorAtributo,"box")  || !strcmp(valorAtributo,"border") )
 				return 1;
 			else{
@@ -1142,6 +1196,7 @@ int atributoValido(char* elemento, char* atributo, char* valorAtributo, int fila
 			}
 		}
 		else if(!strcmp(atributo,"rules")){
+			printWarnings(atributo,filaAtri,columnaAtri,1);//// tipo 1=obsoleto 0=solo html5
 			if( !strcmp(valorAtributo,"none") || !strcmp(valorAtributo,"groups") || !strcmp(valorAtributo,"rows") || !strcmp(valorAtributo,"cols") || !strcmp(valorAtributo,"all"))
 				return 1;
 			else{
@@ -1150,6 +1205,7 @@ int atributoValido(char* elemento, char* atributo, char* valorAtributo, int fila
 			}
 		}
 		else if(!strcmp(atributo,"summary")){
+			printWarnings(atributo,filaAtri,columnaAtri,1);//// tipo 1=obsoleto 0=solo html5
 			if(!isExpReg(texto,valorAtributo)){
 				printErrorSemantico(elemento, atributo, valorAtributo, filaAtri, columnaAtri, filaValor, columnaValor);
 				return -1;
@@ -1159,6 +1215,7 @@ int atributoValido(char* elemento, char* atributo, char* valorAtributo, int fila
 			}
 		}
 		else if(!strcmp(atributo,"width")){
+			printWarnings(atributo,filaAtri,columnaAtri,1);//// tipo 1=obsoleto 0=solo html5
 			if(!isExpReg(numero,valorAtributo)){
 				printErrorSemantico(elemento, atributo, valorAtributo, filaAtri, columnaAtri, filaValor, columnaValor);
 				return -1;
@@ -1253,6 +1310,7 @@ int atributoValido(char* elemento, char* atributo, char* valorAtributo, int fila
 	*************************************************************************************************/
 	else if(!strcmp(elemento,"textarea")){
 		if(!strcmp(atributo,"autofocus")){
+			printWarnings(atributo,filaAtri,columnaAtri,0);//// tipo 1=obsoleto 0=solo html5
 			if(!strcmp(valorAtributo,"autofocus"))
 				return 1;
 			else
@@ -1280,6 +1338,7 @@ int atributoValido(char* elemento, char* atributo, char* valorAtributo, int fila
 			} 
 		}
 		else if(!strcmp(atributo,"form")){
+			printWarnings(atributo,filaAtri,columnaAtri,0);//// tipo 1=obsoleto 0=solo html5
 			if(!isExpReg(texto,valorAtributo)){
 				printErrorSemantico(elemento, atributo, valorAtributo, filaAtri, columnaAtri, filaValor, columnaValor);
 				return -1;
@@ -1289,6 +1348,7 @@ int atributoValido(char* elemento, char* atributo, char* valorAtributo, int fila
 			}
 		}
 		else if(!strcmp(atributo,"maxlength")){
+			printWarnings(atributo,filaAtri,columnaAtri,0);//// tipo 1=obsoleto 0=solo html5
 			if(!isExpReg(numero,valorAtributo)){
 				printErrorSemantico(elemento, atributo, valorAtributo, filaAtri, columnaAtri, filaValor, columnaValor);
 				return -1;
@@ -1307,6 +1367,7 @@ int atributoValido(char* elemento, char* atributo, char* valorAtributo, int fila
 			}
 		}
 		else if(!strcmp(atributo,"placeholder")){
+			printWarnings(atributo,filaAtri,columnaAtri,0);//// tipo 1=obsoleto 0=solo html5
 			if(!isExpReg(textoWithSpace,valorAtributo)){
 				printErrorSemantico(elemento, atributo, valorAtributo, filaAtri, columnaAtri, filaValor, columnaValor);
 				return -1;
@@ -1325,6 +1386,7 @@ int atributoValido(char* elemento, char* atributo, char* valorAtributo, int fila
 			} 
 		}
 		else if(!strcmp(atributo,"required")){
+			printWarnings(atributo,filaAtri,columnaAtri,0);//// tipo 1=obsoleto 0=solo html5
 			if(!strcmp(valorAtributo,"required"))
 				return 1;
 			else
@@ -1343,6 +1405,7 @@ int atributoValido(char* elemento, char* atributo, char* valorAtributo, int fila
 			}	
 		}
 		else if(!strcmp(atributo,"wrap")){
+			printWarnings(atributo,filaAtri,columnaAtri,0);//// tipo 1=obsoleto 0=solo html5
 			if(!strcmp(valorAtributo,"hard")| !strcmp(valorAtributo,"soft") )
 				return 1;
 			else
@@ -1380,7 +1443,7 @@ int globalatributes(char* elemento, char* atributo, char* valorAtributo, int fil
 	} 
 	else if(!strcmp(atributo,"contenteditable")){
 		printWarnings(atributo,filaAtri,columnaAtri,0);//// tipo 1=obsoleto 0=solo html5
-		if(!strcmp(atributo,"true") || !strcmp(atributo,"false") || !strcmp(atributo,"inherit"))
+		if(!strcmp(valorAtributo,"true") || !strcmp(valorAtributo,"false") || !strcmp(valorAtributo,"inherit"))
 			return 1;
 		else
 		{
@@ -1477,7 +1540,7 @@ int globalatributes(char* elemento, char* atributo, char* valorAtributo, int fil
 			return 1;
 	}else if(!strcmp(atributo,"translate")){
 		printWarnings(atributo,filaAtri,columnaAtri,0);//// tipo 1=obsoleto 0=solo html5
-		if(!strcmp(valorAtributo,"translate"))
+		if((!strcmp(valorAtributo,"yes"))||(!strcmp(valorAtributo,"no")))
 			return 1;
 		else
 		{
